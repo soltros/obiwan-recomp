@@ -43,6 +43,13 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   flag at record offset `0xCC` is set. Missing, truncated, version-mismatched,
   or signature-mismatched files are rejected. Creating a `CurPlayerName` file
   alone would not create a valid profile.
+- `WriteProfileSavegame` (`0x000B1490`) is the paired save path. Its Ghidra
+  call site passes mode `"w"` to the file API; it serializes the profile/save
+  state, computes an Xbox signature, and writes the resulting 20-byte digest
+  after the payload. The decompiler labels the ambiguous stdio calls as
+  `fread` because the XBE import signature is shared; the file mode and caller
+  behavior establish that this routine writes. `CommitActivePlayerProfile`
+  invokes it for both the selected profile record and the current-save record.
 
 ## Runtime evidence
 
@@ -62,8 +69,9 @@ diagnostics directory, so its cause is still unknown.
 ## Next reverse-engineering target
 
 The next Ghidra target is the Flash callback that supplies `playerName` to
-`CommitActivePlayerProfile`, then the profile save writer at `0x000B1490` and
-its file API. `0x000B1490` is called for the active profile and current-save
-record during commit; confirm its exact write mode and byte layout before
-trying to seed profile data. The reported later crash still has no
-accompanying bundle or crash log, so its cause remains unknown.
+`CommitActivePlayerProfile`. Direct xrefs show the commit routine is reached
+from profile management and game-flow dispatch, but the exact callback that
+consumes the Flash property is still unresolved. The structure and encoding of
+the variable profile fields also need to be documented before attempting to
+seed save data. The reported later crash still has no accompanying bundle or
+crash log, so its cause remains unknown.
