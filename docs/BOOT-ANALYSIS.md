@@ -17,12 +17,19 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   `0x0002B111` to `PsCreateSystemThreadEx`, along with the XAPI thread
   trampoline at `0x0002E59C`. The trampoline initializes TLS, invokes the
   passed title routine, and terminates the thread when it returns.
-- Profile initialization is in `FUN_000B3080`. It clears the in-memory
+- Profile initialization is in `InitializePlayerProfiles` (`0x000B3080`). It clears the in-memory
   profile slots, attempts to read `Z:\CurPlayerName`, and enumerates saved
   profile records. `FUN_000B33B0` writes `Z:\CurPlayerName` when a profile is
   committed.
-- Menu dispatch is in `FUN_000B7830`. It loads `mainMenu.swf`; when that menu
-  returns the new-player choice, it loads `newPlayer.swf`.
+- Menu dispatch is in `FUN_000B7830`. It first loads `start.swf`, then
+  `mainMenu.swf`. A nonzero main-menu result loads `newPlayer.swf`; a zero
+  result supplies the menu with `freeSlots` and `firstTime` values.
+- After `newPlayer.swf` returns success, the game checks up to seven generated
+  `JEDI <number>` names against existing profiles and calls
+  `PublishPlayerNameToFlash` (`0x000B70A0`) to set `playerName` and
+  `playerNameLength`. `PopulateFlashPlayerList` (`0x000B73C0`) separately sends
+  each active profile's `Name`, `Level`, and `Valid` fields to the player
+  selection UI. The latter is not the profile creation commit itself.
 
 ## Runtime evidence
 
@@ -41,8 +48,8 @@ diagnostics directory, so its cause is still unknown.
 
 ## Next reverse-engineering target
 
-Trace the `newPlayer.swf` callback/message names handled by `FUN_000B7830`,
-then follow the selected-name commit path through `FUN_000B33B0` and the file
-API. This will distinguish a title-side wait in the profile UI from a runtime
-failure during profile creation. Do not seed `CurPlayerName` until its on-disk
-format and related profile data are understood.
+The next Ghidra target is the callback that consumes the Flash `playerName`
+property and commits the selected slot through `FUN_000B33B0`. Continue through
+the savegame writer and file API to identify the on-disk format before trying
+to seed profile data. The reported later crash still has no accompanying
+bundle or crash log, so this static path does not establish its cause.

@@ -48,6 +48,18 @@ def main():
             if result.returncode:
                 print((WORK/'ghidra-names.log').read_text()[-5000:]);return result.returncode
             print((WORK/'ghidra-names.log').read_text(),flush=True)
+            curated=json.loads((ROOT/'tools/ghidra/obiwan_function_names.json').read_text())
+            functions=json.loads((dis/'functions.json').read_text())
+            by_start={entry['start']:entry for entry in functions}
+            missing=sorted(set(curated)-set(by_start))
+            if missing:
+                raise RuntimeError('curated Ghidra annotations do not match discovered functions: '+', '.join(missing))
+            for address,name in curated.items():
+                by_start[address]['name']=name
+            (dis/'functions.json').write_text(json.dumps(functions,indent=2)+'\n')
+            report['curated_function_names']={'count':len(curated),'addresses':sorted(curated)}
+            (WORK/'pipeline.json').write_text(json.dumps(report,indent=2)+'\n')
+            print(f'applied {len(curated)} title-specific Ghidra annotations',flush=True)
     subprocess.run([sys.executable, str(ROOT/'tools/make_obiwan_entry_stub.py')], check=True)
     return 0
 if __name__=='__main__':sys.exit(main())

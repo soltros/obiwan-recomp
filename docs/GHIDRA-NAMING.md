@@ -38,4 +38,6 @@ Without `--ghidra-export`, generation follows the original path unchanged.
 The existing analyzed project currently yields 524 matching names, mostly
 XDK and CRT APIs. Those labels improve navigation and diagnostics; game-owned
 functions still need to be identified through call graphs, strings, and
-runtime evidence.
+runtime evidence. `tools/ghidra/obiwan_function_names.json` also records four
+title-specific names supported by the profile-flow decompilation; the generator
+checks that each address is present before applying them.
