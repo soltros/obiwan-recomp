@@ -2,10 +2,6 @@
   "xboxrecomp": {
     "repository": "https://github.com/sp00nznet/xboxrecomp.git",
     "revision": "f0f8a461496a4f23d9b0aeaa284b8d70ba7ab82b",
-    "version": "v0.16.0",
-    "checkout_status": "present; HEAD matches pinned revision",
-    "parser_status": "standalone parser fetched through GitHub connector"
-  },
-  "native_runtime": "static runtime libraries built; Obi-Wan generated C launcher links on Linux",
-  "game_execution": "Obi-Wan input verification and runtime initialization pass; title event translation and paced vblank unblock startup; overlapping target 0x0016C39F has an entry adapter; execution reaches a continuing draw loop with two flips and hundreds of batches, and the captured framebuffer shows the Star Wars: Obi-Wan logo and 2001 LucasArts copyright splash, then fades nearly to black across subsequent flips; opt-in OHCI input now initializes and enumerates on Linux x86-64 and periodic gamepad reports are served, but no menu or gameplay frame is verified"
+    "version": "v0.16.0"
+  }
 }

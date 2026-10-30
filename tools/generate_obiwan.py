@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 """Hash-pinned, isolated Obi-Wan analysis and C generation. Run inside nix develop."""
-import hashlib,json,os,shutil,subprocess,sys,time
+import argparse,hashlib,json,os,shutil,subprocess,sys,time
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 SDK=Path(os.environ.get('XBOXRECOMP_DIR', ROOT.parent/'xbox-linux/third_party/xboxrecomp'))
 WORK=ROOT/'build/obiwan-analysis'
 GEN=ROOT/'src/recomp/gen'
 def main():
+    ap=argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--game-dir',type=Path,help='path to the legally obtained extracted game directory')
+    args=ap.parse_args()
     import capstone
     target=json.loads((ROOT/'target.json').read_text())
     pin=json.loads((ROOT/'toolchain.json').read_text())['xboxrecomp']['revision']
     head=subprocess.check_output(['git','-C',str(SDK),'rev-parse','HEAD'],text=True).strip()
     if head!=pin:raise RuntimeError('framework revision does not match toolchain.json')
-    source=ROOT.parent/target['directory']/target['executable']
+    source=(args.game_dir if args.game_dir else ROOT.parent/target['directory'])/target['executable']
     if hashlib.sha256(source.read_bytes()).hexdigest()!=target['sha256']:raise RuntimeError('unexpected XBE hash')
     WORK.mkdir(parents=True,exist_ok=True);GEN.mkdir(parents=True,exist_ok=True)
     xbe=WORK/'default.xbe';shutil.copyfile(source,xbe)

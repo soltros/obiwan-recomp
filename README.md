@@ -8,28 +8,34 @@ Original project code is GPL-3.0-only; see [LICENSE](LICENSE). The parser under 
 
 ## Setup
 
-Clone this repository and the shared runtime side by side:
+For a one-command setup on x86-64 Linux with Nix flakes enabled, put your legally obtained extraction anywhere and run:
+
+```sh
+./install.sh "/path/to/Star Wars - Obi-Wan (USA)"
+```
+
+The installer checks the exact XBE hash, clones the shared runtime if needed, fetches and builds its pinned framework, runs the project checks, generates title C, and builds the launcher. It does not copy or upload your game files. `XBOX_LINUX_DIR=/path/to/xbox-linux` and `JOBS=8` can customize the runtime checkout and parallel build count.
+
+You can also clone the repositories side by side:
 
 ```sh
 git clone https://github.com/soltros/obiwan-recomp.git
 git clone https://github.com/soltros/xbox-linux.git
 ```
 
-Place the extracted game folder beside both repositories as `../Star Wars - Obi-Wan (USA)/default.xbe`, or update `target.json` locally. The XBE SHA-256 is checked before analysis and generation.
+The default extraction location is `../Star Wars - Obi-Wan (USA)/default.xbe`; alternatively pass any extraction directory to `install.sh`.
 
 On x86-64 Linux with Nix:
 
 ```sh
 nix develop
 python3 -m unittest discover -s tests -v
-python3 tools/workspace.py baseline
-python3 ../xbox-linux/tools/toolchain.py fetch
-python3 ../xbox-linux/tools/toolchain.py check
-XBOXRECOMP_DIR=../xbox-linux/third_party/xboxrecomp python3 tools/generate_obiwan.py
+../xbox-linux/tools/install_runtime.sh
+XBOXRECOMP_DIR=../xbox-linux/third_party/xboxrecomp python3 tools/generate_obiwan.py --game-dir "../Star Wars - Obi-Wan (USA)"
 XBOXRECOMP_DIR=../xbox-linux/third_party/xboxrecomp python3 tools/build_obiwan.py --jobs 4
 ```
 
-Copy the extracted game files into `build/game/` for runtime access, keeping saves separate in `build/save/`. Generation writes game-specific C files under ignored `src/recomp/gen/`; do not commit them. `obwan.sh` launches with the SDL framebuffer window enabled.
+Generation writes game-specific C files under ignored `src/recomp/gen/`; do not commit them. Launch using `./obwan.sh "/path/to/extracted/game" [save-directory]`; by default saves go to `build/save/`. The script enables the SDL framebuffer window.
 
 ## Status
 
