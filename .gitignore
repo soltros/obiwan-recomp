@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.env/
+.direnv/
+build/
+reports/
+third_party/
+src/recomp/gen/
+*.xbe
+*.iso
+obwan-diagnostic-screenshots/
+xbox_kernel.log

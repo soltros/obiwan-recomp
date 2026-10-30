@@ -1,0 +1,10 @@
+{
+  "id": "obiwan",
+  "directory": "Star Wars - Obi-Wan (USA)",
+  "executable": "default.xbe",
+  "sha256": "3511048a815085f78a8f1c298355b0c887a9d1040e211f888f39376cf101da53",
+  "entry": "0x0002b180",
+  "target": "x86_64-linux",
+  "status": "static analysis only",
+  "section_policy": "Determine reachable code in every section; never treat section executable flags as proof."
+}
