@@ -59,6 +59,12 @@ The hottest lock (`0x00F81610`) belongs to heap object `0x003BD7F0`: `sub_0002CC
 
 The video/audio path is not validated. The initial run also attempted to open `d:\data\aud\AudioTableEntries.txt`, which case-folding now resolves. Game writes were directed to a separate save root and runs used a staged copy, leaving original extractions untouched.
 
+## Screenshot and font-container follow-up
+
+The user-provided captures show the title animation and menu panels rendering, but menu labels can become oversized, clipped, or blocky. The panel geometry and character animation remain visible in the same captures, so the immediate fault is localized to text/UI rendering; the screenshots alone do not distinguish bad font metrics, SWF text transforms, texture sampling, or blend state.
+
+Added `python3 tools/workspace.py fonts --game-dir "/path/to/Star Wars - Obi-Wan (USA)"` to validate the observed LAF font container boundaries and produce `reports/obiwan/fonts.json`. All **24** extracted `.laf` files pass: each declares 256 slots, its exact metadata/payload extent, ordered in-range bitmap offsets, and a stable payload hash. The report leaves per-glyph record fields and bitmap encoding opaque. This rules out basic container truncation/offset corruption for those files, but does not prove their rendering is correct. Next, capture a short focused runtime trace around a text draw and correlate loaded LAF font, font atlas upload/bind, text quad coordinates, texture sampling, and blend state before changing renderer behavior.
+
 ## Next implementation tasks
 
 1. Determine the SELECT-screen action sequence needed to enter gameplay, using released pulses and framebuffer captures. The current five-step run reaches the screen without unresolved targets but does not load another SWF or exit before watchdog.

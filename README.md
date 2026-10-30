@@ -35,6 +35,8 @@ XBOXRECOMP_DIR=../xbox-linux/third_party/xboxrecomp python3 tools/generate_obiwa
 XBOXRECOMP_DIR=../xbox-linux/third_party/xboxrecomp python3 tools/build_obiwan.py --jobs 4
 ```
 
+For read-only checks of the extracted assets and font container tables, run `python3 tools/workspace.py fonts --game-dir "/path/to/extraction"`. The report is written under ignored `reports/obiwan/fonts.json`; it checks file layout and offsets but does not claim to decode glyphs or explain renderer output.
+
 Generation writes game-specific C files under ignored `src/recomp/gen/`; do not commit them. Launch using `./obwan.sh "/path/to/extracted/game" [save-directory]`; by default saves go to `build/save/`. The script enables the SDL framebuffer window.
 
 ## Status

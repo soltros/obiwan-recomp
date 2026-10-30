@@ -12,7 +12,7 @@ def xbe():
     struct.pack_into('<6I',b,0x180,6,0x11000,0x20,0x200,0x10,0x101c0);b[0x1c0:0x1c6]=b'.text\0'
     return b
 
-from obiwan_assets import inspect_bundle, BundleError
+from obiwan_assets import inspect_bundle, BundleError, inspect_laf, LafError
 
 class XbeTests(unittest.TestCase):
     def test_mapping_and_zero_fill(self):
@@ -36,6 +36,25 @@ class BundleTests(unittest.TestCase):
         with self.assertRaises(BundleError):inspect_bundle(b'BUNDLE\n../x\n'+struct.pack('<I',0))
     def test_missing_header_terminator(self):
         with self.assertRaises(BundleError):inspect_bundle(b'BUNDLE\nd:\\x')
+
+class LafTests(unittest.TestCase):
+    def make_laf(self, offsets=(0,2), payload=b'abc'):
+        count=256
+        offsets=list(offsets)+[offsets[-1]]*(count-len(offsets))
+        header=struct.pack('<8I',count,len(payload),1,2,3,4,0,255)
+        charmap=struct.pack('<'+'H'*count,*range(count))
+        records=b''.join(struct.pack('<I',offset)+bytes(12) for offset in offsets)
+        return header+charmap+records+payload
+    def test_observed_layout(self):
+        report=inspect_laf(self.make_laf())
+        self.assertEqual(report['bitmap_payload_size'],3)
+        self.assertEqual(report['glyph_data_offsets'][:2],[0,2])
+    def test_declared_size_mismatch(self):
+        with self.assertRaises(LafError):inspect_laf(self.make_laf()[:-1])
+    def test_out_of_range_offset(self):
+        with self.assertRaises(LafError):inspect_laf(self.make_laf(offsets=(0,4)))
+    def test_descending_offsets(self):
+        with self.assertRaises(LafError):inspect_laf(self.make_laf(offsets=(2,1)))
 
 class ManifestTests(unittest.TestCase):
     def test_changes_missing_and_added(self):

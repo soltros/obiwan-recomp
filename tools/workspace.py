@@ -10,9 +10,9 @@ import subprocess
 import sys
 from pathlib import Path
 try:
-    from obiwan_assets import inspect_bundle, BundleError
+    from obiwan_assets import inspect_bundle, BundleError, inspect_laf, LafError
 except ImportError:
-    inspect_bundle = BundleError = None
+    inspect_bundle = BundleError = inspect_laf = LafError = None
 
 PROJECT=Path(__file__).resolve().parents[1]
 DEFAULT_ROOT=PROJECT.parent
@@ -155,8 +155,24 @@ def obiwan_assets(folder):
         'scope':'Text export metadata only; not a proven runtime dependency closure.'})
     print(f'Obi-Wan: {len(reports)} bundles inspected; {sum(r["anomaly"] is not None for r in reports)} payload anomaly')
 
+def obiwan_fonts(folder):
+    reports=[]
+    for path in sorted((folder/'data/fonts').glob('*.laf')):
+        data=path.read_bytes()
+        try:
+            result=inspect_laf(data)
+        except LafError as exc:
+            result={'layout_status':'invalid','error':str(exc)}
+        reports.append({'path':path.relative_to(folder).as_posix(),'size':len(data),
+                        'sha256':hashlib.sha256(data).hexdigest(),**result})
+    write_json(PROJECT/'reports/obiwan/fonts.json',{
+        'font_files':reports,
+        'scope':'Validates observed container length, character map, ordered in-range bitmap offsets, and payload hash. Glyph metrics and pixel encoding remain opaque.'})
+    invalid=sum(x['layout_status']=='invalid' for x in reports)
+    print(f'Obi-Wan: {len(reports)} LAF fonts inspected; {invalid} invalid containers')
+
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('command',choices=['manifest','verify','xbe','assets','baseline']);ap.add_argument('--game-root',type=Path,default=DEFAULT_ROOT);ap.add_argument('--game-dir',type=Path,help='use this extracted title directory directly');ap.add_argument('--title',choices=['all',*TITLES],default='all');ap.add_argument('--replace-manifest',action='store_true',help='explicitly replace baseline hashes')
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('command',choices=['manifest','verify','xbe','assets','fonts','baseline']);ap.add_argument('--game-root',type=Path,default=DEFAULT_ROOT);ap.add_argument('--game-dir',type=Path,help='use this extracted title directory directly');ap.add_argument('--title',choices=['all',*TITLES],default='all');ap.add_argument('--replace-manifest',action='store_true',help='explicitly replace baseline hashes')
     a=ap.parse_args();keys=list(TITLES) if a.title=='all' else [a.title]
     for key in keys:
         folder=a.game_dir if a.game_dir else a.game_root/TITLES[key][0]
@@ -174,6 +190,7 @@ def main():
                 write_json(path,actual);print(f'{key}: created manifest, {actual["file_count"]} files')
         if a.command in ('xbe','baseline'):xbe_reports(key,folder)
         if key=='obiwan' and a.command in ('assets','baseline'):obiwan_assets(folder)
+        if key=='obiwan' and a.command in ('fonts','baseline'):obiwan_fonts(folder)
 
 if __name__=='__main__':
     try:main()
