@@ -1,6 +1,8 @@
 {
+  "0x000B1D90": "LoadProfileSavegame",
   "0x000B3080": "InitializePlayerProfiles",
   "0x000B33B0": "CommitActivePlayerProfile",
   "0x000B70A0": "PublishPlayerNameToFlash",
-  "0x000B73C0": "PopulateFlashPlayerList"
+  "0x000B73C0": "PopulateFlashPlayerList",
+  "0x000B7830": "RunFrontEndFlow"
 }

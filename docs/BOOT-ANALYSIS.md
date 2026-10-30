@@ -19,17 +19,30 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   passed title routine, and terminates the thread when it returns.
 - Profile initialization is in `InitializePlayerProfiles` (`0x000B3080`). It clears the in-memory
   profile slots, attempts to read `Z:\CurPlayerName`, and enumerates saved
-  profile records. `FUN_000B33B0` writes `Z:\CurPlayerName` when a profile is
-  committed.
-- Menu dispatch is in `FUN_000B7830`. It first loads `start.swf`, then
-  `mainMenu.swf`. A nonzero main-menu result loads `newPlayer.swf`; a zero
-  result supplies the menu with `freeSlots` and `firstTime` values.
+  profile records. `CommitActivePlayerProfile` (`0x000B33B0`) writes
+  `Z:\CurPlayerName` when a profile is committed.
+- `RunFrontEndFlow` (`0x000B7830`) initializes the Flash working directory and
+  loads `start.swf`. On successful load it waits for the title's completion
+  signal before proceeding to `mainMenu.swf`. A zero result from the main-menu
+  movie provides `freeSlots` and `firstTime`; a nonzero result opens
+  `newPlayer.swf`. If the new-player movie succeeds, the title checks generated
+  `JEDI <number>` names against existing profiles and publishes the chosen
+  name. Otherwise, it opens `selectPlayer.swf`; a successful selection then
+  advances to `selectMission.swf`.
 - After `newPlayer.swf` returns success, the game checks up to seven generated
   `JEDI <number>` names against existing profiles and calls
   `PublishPlayerNameToFlash` (`0x000B70A0`) to set `playerName` and
   `playerNameLength`. `PopulateFlashPlayerList` (`0x000B73C0`) separately sends
   each active profile's `Name`, `Level`, and `Valid` fields to the player
   selection UI. The latter is not the profile creation commit itself.
+- `LoadProfileSavegame` (`0x000B1D90`) opens the profile's `Savegame` record and
+  validates its format before treating the slot as valid. The first 32-bit
+  version field must equal `0x0F`; the parser hashes the serialized fields
+  with the Xbox signature API and checks the trailing 20-byte signature. The
+  record includes a fixed header and may include variable-length data when its
+  flag at record offset `0xCC` is set. Missing, truncated, version-mismatched,
+  or signature-mismatched files are rejected. Creating a `CurPlayerName` file
+  alone would not create a valid profile.
 
 ## Runtime evidence
 
@@ -48,8 +61,9 @@ diagnostics directory, so its cause is still unknown.
 
 ## Next reverse-engineering target
 
-The next Ghidra target is the callback that consumes the Flash `playerName`
-property and commits the selected slot through `FUN_000B33B0`. Continue through
-the savegame writer and file API to identify the on-disk format before trying
-to seed profile data. The reported later crash still has no accompanying
-bundle or crash log, so this static path does not establish its cause.
+The next Ghidra target is the Flash callback that supplies `playerName` to
+`CommitActivePlayerProfile`, then the profile save writer at `0x000B1490` and
+its file API. `0x000B1490` is called for the active profile and current-save
+record during commit; confirm its exact write mode and byte layout before
+trying to seed profile data. The reported later crash still has no
+accompanying bundle or crash log, so its cause remains unknown.
