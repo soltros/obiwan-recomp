@@ -9,8 +9,14 @@ from the user's Ghidra project, `XBE_OBIWAN`.
 - The XBE entry at `0x0002B180` initializes the TLS index and starts the game
   thread with routine `0x0002B111`. If thread creation fails, it calls
   `XapiBootToDash`; otherwise startup continues in the game thread.
-- The XAPI `CreateThread` wrapper at `0x0002E634` calls
-  `PsCreateSystemThreadEx` with the title's thread routine at `0x0002E59C`.
+- `mainXapiStartup` at `0x0002B111` initializes the XAPI process and C runtime,
+  then calls the title's main routine at `0x00025730`. Returning from that
+  routine falls through to `XapiBootToDash`, so reaching the dashboard is a
+  fallback after title termination rather than a startup step.
+- The XAPI `CreateThread` wrapper at `0x0002E634` passes the title routine
+  `0x0002B111` to `PsCreateSystemThreadEx`, along with the XAPI thread
+  trampoline at `0x0002E59C`. The trampoline initializes TLS, invokes the
+  passed title routine, and terminates the thread when it returns.
 - Profile initialization is in `FUN_000B3080`. It clears the in-memory
   profile slots, attempts to read `Z:\CurPlayerName`, and enumerates saved
   profile records. `FUN_000B33B0` writes `Z:\CurPlayerName` when a profile is
