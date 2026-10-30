@@ -18,6 +18,9 @@ PROJECT=Path(__file__).resolve().parents[1]
 DEFAULT_ROOT=PROJECT.parent
 TITLES={
  'obiwan':('Star Wars - Obi-Wan (USA)','3511048a815085f78a8f1c298355b0c887a9d1040e211f888f39376cf101da53')}
+# The game creates this empty marker in its extracted data directory while
+# probing optional snapshot assets. It is runtime output, not source content.
+RUNTIME_GENERATED={'obiwan':('snapshot/__ui_ss.mismark',)}
 
 def digest(path):
     with path.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
@@ -33,10 +36,13 @@ def file_paths(folder):
         if p.is_file():result.append(p)
     return result
 
-def inventory(folder):
+def inventory(folder, ignored_paths=()):
     rows=[]; folded=collections.defaultdict(list)
+    ignored={p.casefold() for p in ignored_paths}
     for p in file_paths(folder):
-        rel=p.relative_to(folder).as_posix();folded[rel.casefold()].append(rel)
+        rel=p.relative_to(folder).as_posix()
+        if rel.casefold() in ignored:continue
+        folded[rel.casefold()].append(rel)
         before=p.stat();sha=digest(p);after=p.stat()
         if (before.st_size,before.st_mtime_ns)!=(after.st_size,after.st_mtime_ns):
             raise ValueError(f'input changed while hashing: {p}')
@@ -179,11 +185,18 @@ def main():
         if not folder.is_dir():raise ValueError(f'missing input directory: {folder}')
         path=PROJECT/'manifest.json'
         if a.command in ('manifest','verify','baseline'):
-            actual=inventory(folder)
+            ignored=RUNTIME_GENERATED.get(key,())
+            ignored_folded={item.casefold() for item in ignored}
+            actual=inventory(folder,ignored)
             if path.exists() and not (a.command=='manifest' and a.replace_manifest):
                 diff=differences(json.loads(path.read_text()),actual)
+                diff['ignored_runtime_generated']=sorted(
+                    p.relative_to(folder).as_posix() for p in folder.rglob('*')
+                    if p.is_file() and p.relative_to(folder).as_posix().casefold()
+                    in ignored_folded)
                 write_json(PROJECT/'reports'/key/'manifest-verification.json',diff)
-                if any(diff.values()):raise ValueError(f'{key}: baseline mismatch; see verification report')
+                if any(diff[name] for name in ('missing','added','changed')):
+                    raise ValueError(f'{key}: baseline mismatch; see verification report')
                 print(f'{key}: verified {actual["file_count"]} files / {actual["total_bytes"]} bytes')
             elif a.command=='verify':raise ValueError(f'no baseline manifest: {path}')
             else:

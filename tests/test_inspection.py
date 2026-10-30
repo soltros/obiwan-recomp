@@ -70,6 +70,16 @@ class ManifestTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d);(p/'A').write_bytes(b'a');(p/'a').write_bytes(b'b')
             self.assertEqual(len(inventory(p)['case_collisions']),1)
+    def test_known_runtime_artifact_can_be_excluded(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d);(p/'asset').write_bytes(b'a')
+            (p/'snapshot').mkdir();(p/'snapshot/__ui_ss.mismark').touch()
+            baseline=inventory(p,('snapshot/__ui_ss.mismark',))
+            current=inventory(p,('SNAPSHOT/__UI_SS.MISMARK',))
+            self.assertEqual(differences(baseline,current),{
+                'missing':[],'added':[],'changed':[]})
+            self.assertNotIn('snapshot/__ui_ss.mismark',
+                             [row['path'] for row in current['files']])
     def test_symlink_rejected(self):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d);(p/'a').symlink_to('/nonexistent')
