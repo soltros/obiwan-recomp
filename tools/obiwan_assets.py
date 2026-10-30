@@ -27,8 +27,9 @@ def inspect_laf(data):
         raise LafError(f'file size {len(data)} does not match declared layout size {expected_size}')
     charmap = list(struct.unpack_from('<256H', data, 32))
     record_start = 32 + count * 2
-    offsets = [struct.unpack_from('<I', data, record_start + i * 16)[0]
+    records = [data[record_start + i * 16:record_start + (i + 1) * 16]
                for i in range(count)]
+    offsets = [struct.unpack_from('<I', record)[0] for record in records]
     if any(offset > bitmap_size for offset in offsets):
         raise LafError('glyph data pointer is outside bitmap payload')
     if any(left > right for left, right in zip(offsets, offsets[1:])):
@@ -41,6 +42,19 @@ def inspect_laf(data):
         'bitmap_payload_size': bitmap_size,
         'bitmap_payload_sha256': hashlib.sha256(data[payload_offset:]).hexdigest(),
         'glyph_data_offsets': offsets,
+        # Keep record bytes opaque: this view is for correlating a rendered
+        # character with the exact source record, not asserting metric meaning.
+        'glyph_records': [
+            {
+                'slot': slot,
+                'character_code': charmap[slot],
+                'record_hex': record.hex(),
+                'bitmap_offset': offsets[slot],
+                'bitmap_span_bytes': (offsets[slot + 1] if slot + 1 < count
+                                      else bitmap_size) - offsets[slot],
+            }
+            for slot, record in enumerate(records)
+        ],
         'layout_status': 'valid under observed 256-slot layout; per-glyph fields are not decoded',
     }
 

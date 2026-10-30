@@ -49,6 +49,10 @@ class LafTests(unittest.TestCase):
         report=inspect_laf(self.make_laf())
         self.assertEqual(report['bitmap_payload_size'],3)
         self.assertEqual(report['glyph_data_offsets'][:2],[0,2])
+        self.assertEqual(report['glyph_records'][0],{
+            'slot':0,'character_code':0,'record_hex':'00000000000000000000000000000000',
+            'bitmap_offset':0,'bitmap_span_bytes':2})
+        self.assertEqual(report['glyph_records'][-1]['bitmap_span_bytes'],1)
     def test_declared_size_mismatch(self):
         with self.assertRaises(LafError):inspect_laf(self.make_laf()[:-1])
     def test_out_of_range_offset(self):
