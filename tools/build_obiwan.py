@@ -12,7 +12,7 @@ def main():
             if line and not line.startswith(('#','//')) and '=' in line:
                 key,val=line.split('=',1);cache[key.split(':',1)[0]]=val
         cmake=cache['CMAKE_COMMAND']
-        for key in ['CMAKE_C_COMPILER','CMAKE_MAKE_PROGRAM','PKG_CONFIG_EXECUTABLE','SDL2_DIR','OPENSSL_INCLUDE_DIR','OPENSSL_CRYPTO_LIBRARY','OPENSSL_SSL_LIBRARY']:
+        for key in ['CMAKE_C_COMPILER','CMAKE_MAKE_PROGRAM','PKG_CONFIG_EXECUTABLE','SDL2_DIR','OPENSSL_INCLUDE_DIR','OPENSSL_CRYPTO_LIBRARY','OPENSSL_SSL_LIBRARY','Vulkan_INCLUDE_DIR','Vulkan_LIBRARY']:
             if cache.get(key):args.append('-D'+key+'='+cache[key])
         # Reuse only dependency locations, never source/build directory cache entries.
         roots=[Path(cache[k]).parent for k in ['EPOXY_INCLUDEDIR','OPENSSL_INCLUDE_DIR'] if cache.get(k)]
