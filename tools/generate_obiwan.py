@@ -58,8 +58,16 @@ def main():
                 by_start[address]['name']=name
             (dis/'functions.json').write_text(json.dumps(functions,indent=2)+'\n')
             report['curated_function_names']={'count':len(curated),'addresses':sorted(curated)}
+            runtime_overrides=json.loads((ROOT/'tools/ghidra/runtime_name_overrides.json').read_text())
+            missing=sorted(set(runtime_overrides)-set(by_start))
+            if missing:
+                raise RuntimeError('runtime collision overrides do not match discovered functions: '+', '.join(missing))
+            for address,name in runtime_overrides.items():
+                by_start[address]['name']=name
+            (dis/'functions.json').write_text(json.dumps(functions,indent=2)+'\n')
+            report['runtime_name_overrides']={'count':len(runtime_overrides),'addresses':sorted(runtime_overrides)}
             (WORK/'pipeline.json').write_text(json.dumps(report,indent=2)+'\n')
-            print(f'applied {len(curated)} title-specific Ghidra annotations',flush=True)
+            print(f'applied {len(curated)} title-specific Ghidra annotations and {len(runtime_overrides)} runtime-collision overrides',flush=True)
     subprocess.run([sys.executable, str(ROOT/'tools/make_obiwan_entry_stub.py')], check=True)
     return 0
 if __name__=='__main__':sys.exit(main())

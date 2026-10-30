@@ -1,0 +1,11 @@
+{
+  "0x0002ABE2": "Xbe_OutputDebugStringA",
+  "0x0002B1DA": "Xbe_GetLastError",
+  "0x0002B202": "Xbe_SetLastError",
+  "0x0002E461": "Xbe_SetThreadPriority",
+  "0x0002E4D9": "Xbe_RaiseException",
+  "0x0002E52F": "Xbe_ExitThread",
+  "0x0002E634": "Xbe_CreateThread",
+  "0x002DFBC2": "Xbe_RtlUnwind",
+  "0x003BB340": "Xbe_XInputGetState"
+}
