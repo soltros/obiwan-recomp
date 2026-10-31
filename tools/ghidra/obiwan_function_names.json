@@ -1,7 +1,7 @@
 {
   "0x0020BB80": "LoadOptionalStartupBundle",
   "0x00025730": "RunTitleMainLoop",
-  "0x00082B1D": "HandleFrontEndAction",
+  "0x00082B20": "HandleFrontEndAction",
   "0x0008C7F0": "UpdateUnlockNotifications",
   "0x000E2FD0": "DispatchScriptCommand",
   "0x000E14D0": "LookupScriptCommand",

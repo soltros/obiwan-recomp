@@ -36,35 +36,34 @@ def main():
         if r.returncode:
             print(log.read_text()[-5000:]);return r.returncode
         print(f'{name}: finished in {report["stages"][-1]["seconds"]} seconds',flush=True)
-        if name=='disasm' and options.ghidra_export:
-            merger=SDK/'tools/ghidra_naming/merge_names.py'
-            cmd=[sys.executable,str(merger),'--export-dir',str(options.ghidra_export.resolve()),
-                 '--out',str(WORK/'ghidra-names.json'),'--functions-json',str(dis/'functions.json'),'--apply']
-            print(f'ghidra names: importing export from {options.ghidra_export}',flush=True)
-            with (WORK/'ghidra-names.log').open('w') as f:
-                result=subprocess.run(cmd,cwd=SDK,stdout=f,stderr=subprocess.STDOUT)
-            report['ghidra_names']={'command':cmd,'returncode':result.returncode}
-            (WORK/'pipeline.json').write_text(json.dumps(report,indent=2)+'\n')
-            if result.returncode:
-                print((WORK/'ghidra-names.log').read_text()[-5000:]);return result.returncode
-            print((WORK/'ghidra-names.log').read_text(),flush=True)
-            curated=json.loads((ROOT/'tools/ghidra/obiwan_function_names.json').read_text())
+        if name=='disasm':
+            if options.ghidra_export:
+                merger=SDK/'tools/ghidra_naming/merge_names.py'
+                cmd=[sys.executable,str(merger),'--export-dir',str(options.ghidra_export.resolve()),
+                     '--out',str(WORK/'ghidra-names.json'),'--functions-json',str(dis/'functions.json'),'--apply']
+                print(f'ghidra names: importing export from {options.ghidra_export}',flush=True)
+                with (WORK/'ghidra-names.log').open('w') as f:
+                    result=subprocess.run(cmd,cwd=SDK,stdout=f,stderr=subprocess.STDOUT)
+                report['ghidra_names']={'command':cmd,'returncode':result.returncode}
+                (WORK/'pipeline.json').write_text(json.dumps(report,indent=2)+'\n')
+                if result.returncode:
+                    print((WORK/'ghidra-names.log').read_text()[-5000:]);return result.returncode
+                print((WORK/'ghidra-names.log').read_text(),flush=True)
+            # These labels are confirmed in checked-in Ghidra analysis. Apply
+            # them before func-id and code generation, even without an export.
             functions=json.loads((dis/'functions.json').read_text())
             by_start={entry['start']:entry for entry in functions}
-            missing=sorted(set(curated)-set(by_start))
-            if missing:
-                raise RuntimeError('curated Ghidra annotations do not match discovered functions: '+', '.join(missing))
-            for address,name in curated.items():
-                by_start[address]['name']=name
+            curated=json.loads((ROOT/'tools/ghidra/obiwan_function_names.json').read_text())
+            runtime_overrides=json.loads((ROOT/'tools/ghidra/runtime_name_overrides.json').read_text())
+            for label,annotations in [('curated Ghidra annotations',curated),
+                                      ('runtime collision overrides',runtime_overrides)]:
+                missing=sorted(set(annotations)-set(by_start))
+                if missing:
+                    raise RuntimeError(f'{label} do not match discovered functions: '+', '.join(missing))
+                for address,function_name in annotations.items():
+                    by_start[address]['name']=function_name
             (dis/'functions.json').write_text(json.dumps(functions,indent=2)+'\n')
             report['curated_function_names']={'count':len(curated),'addresses':sorted(curated)}
-            runtime_overrides=json.loads((ROOT/'tools/ghidra/runtime_name_overrides.json').read_text())
-            missing=sorted(set(runtime_overrides)-set(by_start))
-            if missing:
-                raise RuntimeError('runtime collision overrides do not match discovered functions: '+', '.join(missing))
-            for address,name in runtime_overrides.items():
-                by_start[address]['name']=name
-            (dis/'functions.json').write_text(json.dumps(functions,indent=2)+'\n')
             report['runtime_name_overrides']={'count':len(runtime_overrides),'addresses':sorted(runtime_overrides)}
             (WORK/'pipeline.json').write_text(json.dumps(report,indent=2)+'\n')
             print(f'applied {len(curated)} title-specific Ghidra annotations and {len(runtime_overrides)} runtime-collision overrides',flush=True)
