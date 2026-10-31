@@ -56,6 +56,20 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   compares their backing data through `0x00012030`. This establishes a
   bounded string-match lookup, but the underlying record table and the exact
   meaning of its 27 slots are not yet identified.
+- `UpdateUnlockNotifications` at `0x0008C7F0` reads the title's
+  `T:\HighestUnlockedLevelNumber` file (defaulting to zero when absent),
+  compares that value with the in-memory progression value at
+  `DAT_0049B960 + 0x132C`, and writes the newer value back when progression
+  advanced. It then looks up mission IDs `L01_4a`, `L02_1a`, `L03_2a`,
+  `L05_3a`, and `CUT_JC4` through `FindMissionIdIndex`. Matching the current
+  progression index selects a localized unlock message such as
+  `/MessageBodyUnlockedMission/`; certain cases also enqueue character or
+  arena unlock messages. This function records progression notification
+  state and schedules UI messages; it does not itself load a level.
+- `ReadHighestUnlockedLevelNumber` at `0x00096170` reads one 32-bit value from
+  `T:\HighestUnlockedLevelNumber`, returning `1` if the file is missing or a
+  complete 32-bit read fails. This is a separate accessor from the notification
+  code's direct read/write logic.
 - After `newPlayer.swf` returns success, the game checks up to seven generated
   `JEDI <number>` names against existing profiles and calls
   `PublishPlayerNameToFlash` (`0x000B70A0`) to set `playerName` and
