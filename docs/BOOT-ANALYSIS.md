@@ -86,9 +86,13 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   `0x001573E0`. That parser extracts a command name and its remaining text,
   then calls `0x000E2FD0` to dispatch it. The dispatcher parses command
   arguments, resolves the command name through `0x000E14D0`, and invokes the
-  resolved object's callback. This identifies the generic execution path from
-  the Flash `GetURL2` bridge to command lookup, but not the `NextLevel`
-  callback or its level-loading behavior.
+  resolved object's callback. `0x0001C580` is a native script-statement
+  executor; its case 3 joins statement tokens with spaces and calls
+  `0x00157470`. This confirms the path used by native game scripts. The SWF
+  independently emits the same `NextLevel <misCurrent>` command shape, but a
+  direct XBE path from its `GetURL2` event to this runner has not yet been
+  identified. The `NextLevel` callback and its level-loading behavior also
+  remain unresolved.
 - Cross-checking the plaintext game scripts shows `NextLevel` used to move
   between named mission/cutscene resources, while `NextPart` links lettered
   parts within a mission sequence. `cut_jc4.script` explicitly notes that

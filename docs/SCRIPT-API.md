@@ -13,13 +13,16 @@ recoverable printable name. It includes script commands and other named
 entries, such as comparison operators. The catalog is a static name index; it
 does not establish command argument types, behavior, or successful execution.
 
-The command string route is documented in
+The native script command route is documented in
 [`BOOT-ANALYSIS.md`](BOOT-ANALYSIS.md). In brief, `0x00157470` splits a command
 sequence at `|`, `0x001573E0` parses each segment, `0x000E2FD0` dispatches it,
-and `0x000E14D0` looks up the registered name. The selected-mission SWF sends
+and `0x000E14D0` looks up the registered name. Native script statements enter
+this runner from `0x0001C580`. The selected-mission SWF also emits
 `NextLevel <misCurrent>`, and the XBE contains a registration stub for
-`NextLevel` at `0x00346160`. Its adjacent registrations include `NewGame`,
-`NewMissionObjective`, `NewPlayer`, `NextLevelHelper`, and `NextPart`.
+`NextLevel` at `0x00346160`; however, the native bridge from the movie's
+`GetURL2` event to the script runner is not yet identified. Adjacent native
+registrations include `NewGame`, `NewMissionObjective`, `NewPlayer`,
+`NextLevelHelper`, and `NextPart`.
 
 To regenerate the registration list with the local Ghidra installation, run
 from the title repository after importing `default.xbe` into a Ghidra project:
