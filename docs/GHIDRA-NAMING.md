@@ -37,7 +37,8 @@ functions. It records the resulting map and import report under
 The checked-in title annotations and runtime collision overrides are applied
 on every generation, even without `--ghidra-export`. The 333 named native
 script registration stubs also receive generated C names such as
-`obiwan_register_script_NextLevel`; their catalog is
+`obiwan_register_script_NextLevel_00346160`; the XBE VA suffix keeps symbols
+unique. Their catalog is
 [`obiwan_script_registrations.json`](../tools/ghidra/obiwan_script_registrations.json).
 These labels preserve verified registration evidence in generated symbols and
 diagnostics. They do not supply callback semantics or prove that Flash's

@@ -18,7 +18,12 @@ def confirmed_function_names(root: Path) -> dict[str, str]:
         identifier = re.sub(r'[^A-Za-z0-9_]', '_', command)
         if not identifier or identifier[0].isdigit():
             identifier = '_' + identifier
-        names[entry['stub_va']] = f'obiwan_register_script_{identifier}'
+        # Different script names can collapse to the same C identifier after
+        # punctuation is normalized (and a few entries contain no letters).
+        # The stub VA makes every generated symbol unique within its TU.
+        names[entry['stub_va']] = (
+            f"obiwan_register_script_{identifier}_{entry['stub_va'][2:].lower()}"
+        )
 
     # Runtime collisions are deliberate: the runtime owns the Xbe_* labels.
     names.update(json.loads((root / 'tools/ghidra/runtime_name_overrides.json').read_text()))
