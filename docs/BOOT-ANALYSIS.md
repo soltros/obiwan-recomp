@@ -69,9 +69,12 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   to `loadMission`. This establishes the movie's mission-launch command
   format, including that `misCurrent` is the value interpolated into the
   command. The XBE contains `NextLevel` and `NextLevelHelper` tokens, and their
-  code references pass through a shared string-keyed object-table helper; the
-  stored values and the function that executes `loadMission` remain to be
-  resolved.
+  static registration arrays point to the `NextLevel` registration stub at
+  `0x00346160` and the `NextLevelHelper` stub at `0x003461C0`. Adjacent entries
+  register `NewGame`, `NewMissionObjective`, `NewPlayer`, and `NextPart`, which
+  places `NextLevel` in the title's native script-command vocabulary rather
+  than leaving it as an isolated Flash label. The object value and command
+  implementation are still unresolved.
 - The same command vocabulary appears in native post-mission code. The
   routine at `0x0008C4E0` waits on a timer, then submits
   `FadeDownAndWait 1 | UnlockedScreenOff | Pause .5 | NextLevelHelper` to the
@@ -86,6 +89,12 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   resolved object's callback. This identifies the generic execution path from
   the Flash `GetURL2` bridge to command lookup, but not the `NextLevel`
   callback or its level-loading behavior.
+- The native registration arrays contain many additional command names.
+  Their observed families include camera and object movement, animation,
+  sound/music playback, waits, player/profile UI, mission transitions, and
+  unlock-screen control. This gives us a concrete command surface to compare
+  against scripts extracted from the game data and provides candidate commands
+  to follow when locating level setup.
 - The mission-unlock portion of `RunFrontEndFlow` constructs keys including
   `SA_01`, `SA_02`, `SA_03`, and `L05_7`, then asks `0x0009C080` for an index
   before publishing unlock flags to Flash. `0x0009C080` scans indices 0 through
@@ -148,13 +157,13 @@ diagnostics directory, so its cause is still unknown.
 ## Next reverse-engineering target
 
 The gameplay launch target remains unresolved. The selected-mission SWF emits
-`NextLevel <misCurrent>` through `loadMission`, while the XBE's
-string-keyed object table contains `NextLevel` and `NextLevelHelper` tokens.
-The generic script path now traces through `0x00157470` (command-string
-runner), `0x001573E0` (segment parser), `0x000E2FD0` (argument parser and
-dispatcher), and `0x000E14D0` (name lookup). The next pass should identify the
-value associated with `NextLevel`, then trace its callback into bundle and
-level initialization.
+`NextLevel <misCurrent>` through `loadMission`, and the XBE's static command
+registration arrays contain `NextLevel` and `NextLevelHelper` entries. The
+generic script path now traces through `0x00157470` (command-string runner),
+`0x001573E0` (segment parser), `0x000E2FD0` (argument parser and dispatcher),
+and `0x000E14D0` (name lookup). The next pass should identify the descriptor
+returned for `NextLevel`, then trace its callback into bundle and level
+initialization.
 Separately, the exact Flash callback that supplies
 `playerName` to `CommitActivePlayerProfile` remains unresolved, as do the
 variable profile-field encoding and the 27-entry mission lookup table. The
