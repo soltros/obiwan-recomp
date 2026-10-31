@@ -59,6 +59,19 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   dispatcher. The `selectMission.swf` case only opens the movie; the function
   contains no level or mission bundle load call, so it is not the gameplay
   launch path.
+- The extracted `data/interface/flash/selectMission.swf` provides the next
+  handoff. It is an uncompressed SWF v5 (`FWS`), 367,058 bytes, SHA-256
+  `671b10f0b31c35586822f62d0a5cc384b44517447f2754c13c2fb9abc625f3e2`.
+  Its ActionScript `DoAction` tag at file offset `0x5846A` (793-byte payload)
+  builds the value `"NextLevel " + misCurrent` and stores it in the
+  `loadMission` variable. The script then selects a fade command for certain
+  mission indices and issues a `GetURL2` action with the fade sequence joined
+  to `loadMission`. This establishes the movie's mission-launch command
+  format, including that `misCurrent` is the value interpolated into the
+  command. The XBE contains `NextLevel` and `NextLevelHelper` tokens, and their
+  code references pass through a shared string-keyed object-table helper; the
+  stored values and the function that executes `loadMission` remain to be
+  resolved.
 - The mission-unlock portion of `RunFrontEndFlow` constructs keys including
   `SA_01`, `SA_02`, `SA_03`, and `L05_7`, then asks `0x0009C080` for an index
   before publishing unlock flags to Flash. `0x0009C080` scans indices 0 through
@@ -120,12 +133,12 @@ diagnostics directory, so its cause is still unknown.
 
 ## Next reverse-engineering target
 
-The gameplay launch target remains unresolved. `HandleFrontEndAction` and
-`RunFrontEndFlow` both open `selectMission.swf`, while exposed names such as
-`SelectMission`, `NextLevel`, and `NextLevelHelper` appear in the XBE's native
-registration code. The next pass should connect those registered names to
-their implementation and follow the selected mission through bundle/level
-initialization. Separately, the exact Flash callback that supplies
+The gameplay launch target remains unresolved. The selected-mission SWF emits
+`NextLevel <misCurrent>` through `loadMission`, while the XBE's
+string-keyed object table contains `NextLevel` and `NextLevelHelper` tokens.
+The next pass should identify the value associated with those table keys and
+trace the `GetURL2`/`loadMission` bridge into bundle and level initialization.
+Separately, the exact Flash callback that supplies
 `playerName` to `CommitActivePlayerProfile` remains unresolved, as do the
 variable profile-field encoding and the 27-entry mission lookup table. The
 reported later crash still has no accompanying bundle or crash log, so its
