@@ -2,6 +2,7 @@
 """Hash-pinned, isolated Obi-Wan analysis and C generation. Run inside nix develop."""
 import argparse,hashlib,json,os,shutil,subprocess,sys,time
 from pathlib import Path
+from ghidra_names import confirmed_function_names
 ROOT=Path(__file__).resolve().parents[1]
 SDK=Path(os.environ.get('XBOXRECOMP_DIR', ROOT.parent/'xbox-linux/third_party/xboxrecomp'))
 WORK=ROOT/'build/obiwan-analysis'
@@ -53,20 +54,17 @@ def main():
             # them before func-id and code generation, even without an export.
             functions=json.loads((dis/'functions.json').read_text())
             by_start={entry['start']:entry for entry in functions}
-            curated=json.loads((ROOT/'tools/ghidra/obiwan_function_names.json').read_text())
-            runtime_overrides=json.loads((ROOT/'tools/ghidra/runtime_name_overrides.json').read_text())
-            for label,annotations in [('curated Ghidra annotations',curated),
-                                      ('runtime collision overrides',runtime_overrides)]:
-                missing=sorted(set(annotations)-set(by_start))
-                if missing:
-                    raise RuntimeError(f'{label} do not match discovered functions: '+', '.join(missing))
-                for address,function_name in annotations.items():
-                    by_start[address]['name']=function_name
+            annotations=confirmed_function_names(ROOT)
+            missing=sorted(set(annotations)-set(by_start))
+            if missing:
+                raise RuntimeError('confirmed Ghidra annotations do not match discovered functions: '+', '.join(missing))
+            for address,function_name in annotations.items():
+                by_start[address]['name']=function_name
             (dis/'functions.json').write_text(json.dumps(functions,indent=2)+'\n')
-            report['curated_function_names']={'count':len(curated),'addresses':sorted(curated)}
-            report['runtime_name_overrides']={'count':len(runtime_overrides),'addresses':sorted(runtime_overrides)}
+            report['confirmed_function_names']={'count':len(annotations),'addresses':sorted(annotations)}
             (WORK/'pipeline.json').write_text(json.dumps(report,indent=2)+'\n')
-            print(f'applied {len(curated)} title-specific Ghidra annotations and {len(runtime_overrides)} runtime-collision overrides',flush=True)
+            registration_count=len(json.loads((ROOT/'tools/ghidra/obiwan_script_registrations.json').read_text())['registrations'])
+            print(f'applied {len(annotations)} confirmed function names, including {registration_count} script registration stubs',flush=True)
     subprocess.run([sys.executable, str(ROOT/'tools/make_obiwan_entry_stub.py')], check=True)
     return 0
 if __name__=='__main__':sys.exit(main())

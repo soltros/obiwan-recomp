@@ -1,10 +1,12 @@
 import struct
+import json
 import sys
 import tempfile
 import unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 from workspace import checked_sections, va_offset, inventory, differences
+from ghidra_names import confirmed_function_names
 
 def xbe():
     b=bytearray(0x220);b[:4]=b'XBEH'
@@ -84,6 +86,19 @@ class ManifestTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d);(p/'a').symlink_to('/nonexistent')
             with self.assertRaises(ValueError):inventory(p)
+
+class GhidraNameTests(unittest.TestCase):
+    def test_registration_stubs_and_title_functions_are_codegen_names(self):
+        root=Path(__file__).resolve().parents[1]
+        names=confirmed_function_names(root)
+        registrations=json.loads((root/'tools/ghidra/obiwan_script_registrations.json').read_text())['registrations']
+        named=[entry for entry in registrations if entry['name']]
+        self.assertEqual(len(named),333)
+        self.assertEqual(names['0x00346160'],'obiwan_register_script_NextLevel')
+        self.assertEqual(names['0x003461C0'],'obiwan_register_script_NextLevelHelper')
+        self.assertEqual(names['0x00025730'],'RunTitleMainLoop')
+        self.assertEqual(names['0x0002E634'],'Xbe_CreateThread')
+        self.assertEqual(sum(entry['stub_va'] in names for entry in named),len(named))
 
 
 if __name__=='__main__':unittest.main()
