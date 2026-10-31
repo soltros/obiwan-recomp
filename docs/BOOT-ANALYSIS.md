@@ -48,6 +48,17 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   `JEDI <number>` names against existing profiles and publishes the chosen
   name. Otherwise, it opens `selectPlayer.swf`; a successful selection then
   advances to `selectMission.swf`.
+- `HandleFrontEndAction` at `0x00082B1D` dispatches title UI actions from an
+  event object. It first requires the event's active bit, checks the event
+  kind (`0x200`/`0x208` versus `0x201`/`0x209`), verifies the UI object's
+  lifetime, and reads an action code from the nested event data. Its action
+  cases load `newPlayer.swf`, `selectPlayer.swf`, `selectMission.swf`,
+  `mainMenu.swf`, and `vsBattle_Player.swf`; separate cases commit the active
+  profile or pass a parsed profile index to the profile-management routine.
+  This confirms that menu transitions are driven through a native event
+  dispatcher. The `selectMission.swf` case only opens the movie; the function
+  contains no level or mission bundle load call, so it is not the gameplay
+  launch path.
 - The mission-unlock portion of `RunFrontEndFlow` constructs keys including
   `SA_01`, `SA_02`, `SA_03`, and `L05_7`, then asks `0x0009C080` for an index
   before publishing unlock flags to Flash. `0x0009C080` scans indices 0 through
@@ -109,12 +120,13 @@ diagnostics directory, so its cause is still unknown.
 
 ## Next reverse-engineering target
 
-The remaining front-end target is the Flash callback that supplies
-`playerName` to `CommitActivePlayerProfile`. Direct xrefs show the commit
-routine is reached from profile management and game-flow dispatch, but the
-exact callback that consumes the Flash property is still unresolved. The
-structure and encoding of the variable profile fields also need to be
-documented before attempting to seed save data. The next title-flow pass should
-identify the 27-entry mission lookup table and trace the successful
-`selectMission.swf` result into the level loader. The reported later crash still
-has no accompanying bundle or crash log, so its cause remains unknown.
+The gameplay launch target remains unresolved. `HandleFrontEndAction` and
+`RunFrontEndFlow` both open `selectMission.swf`, while exposed names such as
+`SelectMission`, `NextLevel`, and `NextLevelHelper` appear in the XBE's native
+registration code. The next pass should connect those registered names to
+their implementation and follow the selected mission through bundle/level
+initialization. Separately, the exact Flash callback that supplies
+`playerName` to `CommitActivePlayerProfile` remains unresolved, as do the
+variable profile-field encoding and the 27-entry mission lookup table. The
+reported later crash still has no accompanying bundle or crash log, so its
+cause remains unknown.
