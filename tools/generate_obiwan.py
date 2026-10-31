@@ -63,8 +63,12 @@ def main():
             (dis/'functions.json').write_text(json.dumps(functions,indent=2)+'\n')
             report['confirmed_function_names']={'count':len(annotations),'addresses':sorted(annotations)}
             (WORK/'pipeline.json').write_text(json.dumps(report,indent=2)+'\n')
-            registration_count=len(json.loads((ROOT/'tools/ghidra/obiwan_script_registrations.json').read_text())['registrations'])
-            print(f'applied {len(annotations)} confirmed function names, including {registration_count} script registration stubs',flush=True)
+            registration_count=sum(bool(entry['name']) for entry in json.loads(
+                (ROOT/'tools/ghidra/obiwan_script_registrations.json').read_text()
+            )['registrations'])
+            report['named_script_registration_stubs']=registration_count
+            (WORK/'pipeline.json').write_text(json.dumps(report,indent=2)+'\n')
+            print(f'applied {len(annotations)} confirmed function names, including {registration_count} named script registration stubs',flush=True)
     subprocess.run([sys.executable, str(ROOT/'tools/make_obiwan_entry_stub.py')], check=True)
     return 0
 if __name__=='__main__':sys.exit(main())
