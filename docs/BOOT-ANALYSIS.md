@@ -72,6 +72,20 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   code references pass through a shared string-keyed object-table helper; the
   stored values and the function that executes `loadMission` remain to be
   resolved.
+- The same command vocabulary appears in native post-mission code. The
+  routine at `0x0008C4E0` waits on a timer, then submits
+  `FadeDownAndWait 1 | UnlockedScreenOff | Pause .5 | NextLevelHelper` to the
+  script engine. This is strong evidence that `NextLevelHelper` is a script
+  command, although the routine's broader unlock-message work and its exact
+  entry conditions are not yet fully named.
+- `0x00157470` is the command-string runner. It creates a script context,
+  splits the input at `|`, and sends each segment through
+  `0x001573E0`. That parser extracts a command name and its remaining text,
+  then calls `0x000E2FD0` to dispatch it. The dispatcher parses command
+  arguments, resolves the command name through `0x000E14D0`, and invokes the
+  resolved object's callback. This identifies the generic execution path from
+  the Flash `GetURL2` bridge to command lookup, but not the `NextLevel`
+  callback or its level-loading behavior.
 - The mission-unlock portion of `RunFrontEndFlow` constructs keys including
   `SA_01`, `SA_02`, `SA_03`, and `L05_7`, then asks `0x0009C080` for an index
   before publishing unlock flags to Flash. `0x0009C080` scans indices 0 through
@@ -136,8 +150,11 @@ diagnostics directory, so its cause is still unknown.
 The gameplay launch target remains unresolved. The selected-mission SWF emits
 `NextLevel <misCurrent>` through `loadMission`, while the XBE's
 string-keyed object table contains `NextLevel` and `NextLevelHelper` tokens.
-The next pass should identify the value associated with those table keys and
-trace the `GetURL2`/`loadMission` bridge into bundle and level initialization.
+The generic script path now traces through `0x00157470` (command-string
+runner), `0x001573E0` (segment parser), `0x000E2FD0` (argument parser and
+dispatcher), and `0x000E14D0` (name lookup). The next pass should identify the
+value associated with `NextLevel`, then trace its callback into bundle and
+level initialization.
 Separately, the exact Flash callback that supplies
 `playerName` to `CommitActivePlayerProfile` remains unresolved, as do the
 variable profile-field encoding and the 27-entry mission lookup table. The
