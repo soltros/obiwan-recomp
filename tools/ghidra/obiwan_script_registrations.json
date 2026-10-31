@@ -1,0 +1,1368 @@
+{
+  "source": "Obi-Wan default.xbe; Ghidra static-registration analysis",
+  "registration_helper_va": "0x00159F70",
+  "tables": [
+    "0x00422900",
+    "0x00422B60"
+  ],
+  "entry_count": 339,
+  "caveat": "Entries identify name-registration stubs. They do not document argument signatures, callback behavior, or successful runtime dispatch.",
+  "registrations": [
+    {
+      "stub_va": "0x00345680",
+      "name": "MoveCameraUp"
+    },
+    {
+      "stub_va": "0x003456E0",
+      "name": "MoveCameraUpAndWait"
+    },
+    {
+      "stub_va": "0x00345740",
+      "name": "MoveCameraDown"
+    },
+    {
+      "stub_va": "0x003457A0",
+      "name": "MoveCameraDownAndWait"
+    },
+    {
+      "stub_va": "0x00345800",
+      "name": "MoveCameraStraightUp"
+    },
+    {
+      "stub_va": "0x00345860",
+      "name": "MoveCameraStraightUpAndWait"
+    },
+    {
+      "stub_va": "0x003458C0",
+      "name": "MoveCameraStraightDown"
+    },
+    {
+      "stub_va": "0x00345920",
+      "name": "MoveCameraStraightDownAndWait"
+    },
+    {
+      "stub_va": "0x00345980",
+      "name": "MoveElevatorToFloor"
+    },
+    {
+      "stub_va": "0x003459E0",
+      "name": "MoveElevatorToFloorAndWait"
+    },
+    {
+      "stub_va": "0x00345A40",
+      "name": "MoveElevatorToFloorInstantly"
+    },
+    {
+      "stub_va": "0x00345AA0",
+      "name": "MoveObject"
+    },
+    {
+      "stub_va": "0x00345B00",
+      "name": "MoveObjectAndWait"
+    },
+    {
+      "stub_va": "0x00345B60",
+      "name": "MoveObjectForward"
+    },
+    {
+      "stub_va": "0x00345BC0",
+      "name": "MoveObjectForwardAndWait"
+    },
+    {
+      "stub_va": "0x00345C20",
+      "name": "MoveObjectBackward"
+    },
+    {
+      "stub_va": "0x00345C80",
+      "name": "MoveObjectBackwardAndWait"
+    },
+    {
+      "stub_va": "0x00345CE0",
+      "name": "MoveObjectLeft"
+    },
+    {
+      "stub_va": "0x00345D40",
+      "name": "MoveObjectLeftAndWait"
+    },
+    {
+      "stub_va": "0x00345DA0",
+      "name": "MoveObjectRight"
+    },
+    {
+      "stub_va": "0x00345E00",
+      "name": "MoveObjectRightAndWait"
+    },
+    {
+      "stub_va": "0x00345E60",
+      "name": "MoveObjectUp"
+    },
+    {
+      "stub_va": "0x00345EC0",
+      "name": "MoveObjectUpAndWait"
+    },
+    {
+      "stub_va": "0x00345F20",
+      "name": "MoveObjectDown"
+    },
+    {
+      "stub_va": "0x00345F80",
+      "name": "MoveObjectDownAndWait"
+    },
+    {
+      "stub_va": "0x00345FE0",
+      "name": "NeverDisableWeapon"
+    },
+    {
+      "stub_va": "0x00346040",
+      "name": "NewGame"
+    },
+    {
+      "stub_va": "0x003460A0",
+      "name": "NewMissionObjective"
+    },
+    {
+      "stub_va": "0x00346100",
+      "name": "NewPlayer"
+    },
+    {
+      "stub_va": "0x00346160",
+      "name": "NextLevel"
+    },
+    {
+      "stub_va": "0x003461C0",
+      "name": "NextLevelHelper"
+    },
+    {
+      "stub_va": "0x00346220",
+      "name": "NextPart"
+    },
+    {
+      "stub_va": "0x00346280",
+      "name": "NoDeathAnimation"
+    },
+    {
+      "stub_va": "0x003462E0",
+      "name": "NoCharactersInRegion"
+    },
+    {
+      "stub_va": "0x00346340",
+      "name": "NoEnemiesInRegion"
+    },
+    {
+      "stub_va": "0x003463A0",
+      "name": null
+    },
+    {
+      "stub_va": "0x00346400",
+      "name": "Nudge"
+    },
+    {
+      "stub_va": "0x00346460",
+      "name": "OpenDoor"
+    },
+    {
+      "stub_va": "0x003464C0",
+      "name": "OpenDoorAndWait"
+    },
+    {
+      "stub_va": "0x00346520",
+      "name": "OpeningCrawlOn"
+    },
+    {
+      "stub_va": "0x00346580",
+      "name": "OpeningCrawlOff"
+    },
+    {
+      "stub_va": "0x003465E0",
+      "name": "OptConfig"
+    },
+    {
+      "stub_va": "0x00346640",
+      "name": "OptLock"
+    },
+    {
+      "stub_va": "0x003466A0",
+      "name": "OptRumble"
+    },
+    {
+      "stub_va": "0x00346700",
+      "name": "OptSubtitles"
+    },
+    {
+      "stub_va": "0x00346760",
+      "name": "OptText"
+    },
+    {
+      "stub_va": "0x003467C0",
+      "name": "OptVolMusic"
+    },
+    {
+      "stub_va": "0x00346820",
+      "name": "OptVolSound"
+    },
+    {
+      "stub_va": "0x00346880",
+      "name": "OptVolVoice"
+    },
+    {
+      "stub_va": "0x003468E0",
+      "name": "PanLeft"
+    },
+    {
+      "stub_va": "0x00346940",
+      "name": "PanLeftAndWait"
+    },
+    {
+      "stub_va": "0x003469A0",
+      "name": "PanRight"
+    },
+    {
+      "stub_va": "0x00346A00",
+      "name": "PanRightAndWait"
+    },
+    {
+      "stub_va": "0x00346A60",
+      "name": "PanUp"
+    },
+    {
+      "stub_va": "0x00346AC0",
+      "name": "PanUpAndWait"
+    },
+    {
+      "stub_va": "0x00346B20",
+      "name": "PanDown"
+    },
+    {
+      "stub_va": "0x00346B80",
+      "name": "PanDownAndWait"
+    },
+    {
+      "stub_va": "0x00346BE0",
+      "name": "ParticleGenOn"
+    },
+    {
+      "stub_va": "0x00346C40",
+      "name": "ParticleGenOff"
+    },
+    {
+      "stub_va": "0x00346CA0",
+      "name": "Pause"
+    },
+    {
+      "stub_va": "0x00346D00",
+      "name": "PauseRandom"
+    },
+    {
+      "stub_va": "0x00346D60",
+      "name": "PauseScript"
+    },
+    {
+      "stub_va": "0x00346DC0",
+      "name": "PDAOn"
+    },
+    {
+      "stub_va": "0x00346E20",
+      "name": "PDAOff"
+    },
+    {
+      "stub_va": "0x00346E80",
+      "name": "PhysicsRegionOn"
+    },
+    {
+      "stub_va": "0x00346EE0",
+      "name": "PhysicsRegionOff"
+    },
+    {
+      "stub_va": "0x00346F40",
+      "name": "PlayAnimation"
+    },
+    {
+      "stub_va": "0x00346FA0",
+      "name": "PlayAnimationAndPause"
+    },
+    {
+      "stub_va": "0x00347000",
+      "name": "PlayAnimationAndWait"
+    },
+    {
+      "stub_va": "0x003470C0",
+      "name": "PlayAnimationGoalAndWait"
+    },
+    {
+      "stub_va": "0x00347120",
+      "name": "PlayAnimationLooping"
+    },
+    {
+      "stub_va": "0x00347180",
+      "name": "PlayAudioCue"
+    },
+    {
+      "stub_va": "0x003471E0",
+      "name": "PlayAudioCueAndWait"
+    },
+    {
+      "stub_va": "0x00347240",
+      "name": "PlayBattleLoop"
+    },
+    {
+      "stub_va": "0x003472A0",
+      "name": "PlayBattleLoopOverlap"
+    },
+    {
+      "stub_va": "0x00347300",
+      "name": "PlayFlashFile"
+    },
+    {
+      "stub_va": "0x00347360",
+      "name": "PlayFlourish"
+    },
+    {
+      "stub_va": "0x003473C0",
+      "name": "PlayFlourishAndWait"
+    },
+    {
+      "stub_va": "0x00347420",
+      "name": "PlayFlourishOverMusic"
+    },
+    {
+      "stub_va": "0x00347480",
+      "name": "PlayGesture"
+    },
+    {
+      "stub_va": "0x003474E0",
+      "name": "PlayGestureAndWait"
+    },
+    {
+      "stub_va": "0x00347540",
+      "name": "PlayMenuCue"
+    },
+    {
+      "stub_va": "0x003475A0",
+      "name": "PlayMusic"
+    },
+    {
+      "stub_va": "0x00347600",
+      "name": "PlayMusicCue"
+    },
+    {
+      "stub_va": "0x00347660",
+      "name": "PlayMusicOverlap"
+    },
+    {
+      "stub_va": "0x003476C0",
+      "name": "PlaySound"
+    },
+    {
+      "stub_va": "0x00347720",
+      "name": "PlaySoundAndWait"
+    },
+    {
+      "stub_va": "0x00347780",
+      "name": "PlayerHasFullHealth"
+    },
+    {
+      "stub_va": "0x003477E0",
+      "name": "PreEndCutScene"
+    },
+    {
+      "stub_va": "0x00347840",
+      "name": "Print"
+    },
+    {
+      "stub_va": "0x003478A0",
+      "name": "PrintFloat"
+    },
+    {
+      "stub_va": "0x00347900",
+      "name": "PrintInt"
+    },
+    {
+      "stub_va": "0x00347960",
+      "name": "Println"
+    },
+    {
+      "stub_va": "0x003479C0",
+      "name": "Push"
+    },
+    {
+      "stub_va": "0x00347A20",
+      "name": "RandomFloat"
+    },
+    {
+      "stub_va": "0x00347A80",
+      "name": "RandomInt"
+    },
+    {
+      "stub_va": "0x00347AE0",
+      "name": "RefPos"
+    },
+    {
+      "stub_va": "0x00347B40",
+      "name": "Region"
+    },
+    {
+      "stub_va": "0x00347BA0",
+      "name": "RemoveActor"
+    },
+    {
+      "stub_va": "0x00347C00",
+      "name": "RemoveConstraints"
+    },
+    {
+      "stub_va": "0x00347C60",
+      "name": "RemoveGroup"
+    },
+    {
+      "stub_va": "0x00347CC0",
+      "name": "RemoveInventoryItem"
+    },
+    {
+      "stub_va": "0x00347D20",
+      "name": "RemovePlayer"
+    },
+    {
+      "stub_va": "0x00347D80",
+      "name": "RemoveState"
+    },
+    {
+      "stub_va": "0x00347DE0",
+      "name": "RenderAlways"
+    },
+    {
+      "stub_va": "0x00347E40",
+      "name": "RenderAlwaysOff"
+    },
+    {
+      "stub_va": "0x00347EA0",
+      "name": "ResetCamera"
+    },
+    {
+      "stub_va": "0x00347F00",
+      "name": "ResetDeadOnAimFraction"
+    },
+    {
+      "stub_va": "0x00347F60",
+      "name": "ResetRunForwardSpeed"
+    },
+    {
+      "stub_va": "0x00347FC0",
+      "name": "ResetScript"
+    },
+    {
+      "stub_va": "0x00348020",
+      "name": "ResetWalkForwardSpeed"
+    },
+    {
+      "stub_va": "0x00348080",
+      "name": "Respawn"
+    },
+    {
+      "stub_va": "0x003480E0",
+      "name": "Resurrect"
+    },
+    {
+      "stub_va": "0x00348140",
+      "name": "ReturnControlTo"
+    },
+    {
+      "stub_va": "0x003481A0",
+      "name": "RewardPlayer"
+    },
+    {
+      "stub_va": "0x00348200",
+      "name": "RollLeft"
+    },
+    {
+      "stub_va": "0x00348260",
+      "name": "RollLeftAndWait"
+    },
+    {
+      "stub_va": "0x003482C0",
+      "name": "RollRight"
+    },
+    {
+      "stub_va": "0x00348320",
+      "name": "RollRightAndWait"
+    },
+    {
+      "stub_va": "0x00348380",
+      "name": "RotateObject"
+    },
+    {
+      "stub_va": "0x003483E0",
+      "name": "RotateObjectAndWait"
+    },
+    {
+      "stub_va": "0x00348440",
+      "name": "RotateObjectLeft"
+    },
+    {
+      "stub_va": "0x003484A0",
+      "name": "RotateObjectLeftAndWait"
+    },
+    {
+      "stub_va": "0x00348500",
+      "name": "RotateObjectRight"
+    },
+    {
+      "stub_va": "0x00348560",
+      "name": "RotateObjectRightAndWait"
+    },
+    {
+      "stub_va": "0x003485C0",
+      "name": "RotateObjectUp"
+    },
+    {
+      "stub_va": "0x00348620",
+      "name": "RotateObjectUpAndWait"
+    },
+    {
+      "stub_va": "0x00348680",
+      "name": "RotateObjectDown"
+    },
+    {
+      "stub_va": "0x003486E0",
+      "name": "RotateObjectDownAndWait"
+    },
+    {
+      "stub_va": "0x00348740",
+      "name": "RumbleLeft"
+    },
+    {
+      "stub_va": "0x003487A0",
+      "name": "RumbleRight"
+    },
+    {
+      "stub_va": "0x00348800",
+      "name": "Run"
+    },
+    {
+      "stub_va": "0x00348860",
+      "name": "RunScript"
+    },
+    {
+      "stub_va": "0x003488C0",
+      "name": "RunScriptAndWait"
+    },
+    {
+      "stub_va": "0x00348920",
+      "name": "RunToNode"
+    },
+    {
+      "stub_va": "0x00348980",
+      "name": "RunToNodeAndWait"
+    },
+    {
+      "stub_va": "0x003489E0",
+      "name": "Save"
+    },
+    {
+      "stub_va": "0x00348A40",
+      "name": "SaveOptions"
+    },
+    {
+      "stub_va": "0x00348AA0",
+      "name": "SayLine"
+    },
+    {
+      "stub_va": "0x00348B00",
+      "name": "SayLine2D"
+    },
+    {
+      "stub_va": "0x00348B60",
+      "name": "SayLine2DAndContinue"
+    },
+    {
+      "stub_va": "0x00348BC0",
+      "name": "SayLineAndContinue"
+    },
+    {
+      "stub_va": "0x00348C20",
+      "name": "SayLineNoSubtitles"
+    },
+    {
+      "stub_va": "0x00348C80",
+      "name": "SayLineNonPositional"
+    },
+    {
+      "stub_va": "0x00348CE0",
+      "name": "SayLineNonPositionalAndContinue"
+    },
+    {
+      "stub_va": "0x00348D40",
+      "name": "SayLineWhenNudged"
+    },
+    {
+      "stub_va": "0x00348DA0",
+      "name": "SayLineWithSubtitles"
+    },
+    {
+      "stub_va": "0x00348E00",
+      "name": "Script"
+    },
+    {
+      "stub_va": "0x00348E60",
+      "name": "SecondaryIdleOn"
+    },
+    {
+      "stub_va": "0x00348EC0",
+      "name": "SecondaryIdleOff"
+    },
+    {
+      "stub_va": "0x00348F20",
+      "name": "SelectJedi"
+    },
+    {
+      "stub_va": "0x00348F80",
+      "name": "SelectMission"
+    },
+    {
+      "stub_va": "0x00348FE0",
+      "name": "SelectPlayer"
+    },
+    {
+      "stub_va": "0x00349040",
+      "name": "Set"
+    },
+    {
+      "stub_va": "0x003490A0",
+      "name": "SetActivateDistance"
+    },
+    {
+      "stub_va": "0x00349100",
+      "name": "SetAIBoundary"
+    },
+    {
+      "stub_va": "0x00349160",
+      "name": "SetAIBoundaryAndNode"
+    },
+    {
+      "stub_va": "0x003491C0",
+      "name": "SetAlwaysDetectRange"
+    },
+    {
+      "stub_va": "0x00349220",
+      "name": "SetAnimTableIndex"
+    },
+    {
+      "stub_va": "0x00349280",
+      "name": "SetBattleMusicDistance"
+    },
+    {
+      "stub_va": "0x003492E0",
+      "name": "SetBattleMusicLeeway"
+    },
+    {
+      "stub_va": "0x00349340",
+      "name": "SetDamagedByPlayerOnly"
+    },
+    {
+      "stub_va": "0x003493A0",
+      "name": "SetDeadOnAimFraction"
+    },
+    {
+      "stub_va": "0x00349400",
+      "name": "SetDefaultSurface"
+    },
+    {
+      "stub_va": "0x00349460",
+      "name": "SetDoorToHalfCycle"
+    },
+    {
+      "stub_va": "0x003494C0",
+      "name": "SetExplorationNum"
+    },
+    {
+      "stub_va": "0x00349520",
+      "name": "SetFarClip"
+    },
+    {
+      "stub_va": "0x00349580",
+      "name": "SetFollowPlayer"
+    },
+    {
+      "stub_va": "0x003495E0",
+      "name": "SetFollowPlayerDistance"
+    },
+    {
+      "stub_va": "0x00349640",
+      "name": "SetForceUsesNeeded"
+    },
+    {
+      "stub_va": "0x003496A0",
+      "name": "SetGameSpeed"
+    },
+    {
+      "stub_va": "0x00349700",
+      "name": "SetHitPoints"
+    },
+    {
+      "stub_va": "0x00349760",
+      "name": "SetHitPointRatio"
+    },
+    {
+      "stub_va": "0x003497C0",
+      "name": "SetHostageAlertDistance"
+    },
+    {
+      "stub_va": "0x00349820",
+      "name": "SetHostageFollowCmdrDistance"
+    },
+    {
+      "stub_va": "0x00349880",
+      "name": "SetHostageSituation"
+    },
+    {
+      "stub_va": "0x003498E0",
+      "name": "SetIdleAttentionSpan"
+    },
+    {
+      "stub_va": "0x00349940",
+      "name": "SetIdleScript"
+    },
+    {
+      "stub_va": "0x003499A0",
+      "name": "SetMaxAttackers"
+    },
+    {
+      "stub_va": "0x00349A00",
+      "name": "SetMeleeDamage"
+    },
+    {
+      "stub_va": "0x00349A60",
+      "name": "SetMissionCritical"
+    },
+    {
+      "stub_va": "0x00349AC0",
+      "name": "SetMusicCrossfadeTime"
+    },
+    {
+      "stub_va": "0x00349B20",
+      "name": "SetMusicInterval"
+    },
+    {
+      "stub_va": "0x00349B80",
+      "name": "SetMusicResetInterval"
+    },
+    {
+      "stub_va": "0x00349BE0",
+      "name": "SetMustFollowPlayerDistance"
+    },
+    {
+      "stub_va": "0x00349C40",
+      "name": "SetMustFollowPlayerPriority"
+    },
+    {
+      "stub_va": "0x00349CA0",
+      "name": "SetNodeHeightTolerance"
+    },
+    {
+      "stub_va": "0x00349D00",
+      "name": "SetOnFire"
+    },
+    {
+      "stub_va": "0x00349D60",
+      "name": "SetOpeningTextCoordinates"
+    },
+    {
+      "stub_va": "0x00349DC0",
+      "name": "SetOpeningTextDistance"
+    },
+    {
+      "stub_va": "0x00349E20",
+      "name": "SetOpeningTextScale"
+    },
+    {
+      "stub_va": "0x00349E80",
+      "name": "SetPainRegion"
+    },
+    {
+      "stub_va": "0x00349EE0",
+      "name": "SetPatrolAttentionSpan"
+    },
+    {
+      "stub_va": "0x00349F40",
+      "name": "SetPatrolTypes"
+    },
+    {
+      "stub_va": "0x00349FA0",
+      "name": "SetRegionAmbientLoopingSound"
+    },
+    {
+      "stub_va": "0x0034A000",
+      "name": "SetRegionSoundVolume"
+    },
+    {
+      "stub_va": "0x0034A060",
+      "name": "SetRunForwardSpeed"
+    },
+    {
+      "stub_va": "0x0034A0C0",
+      "name": "SetSeeingDistance"
+    },
+    {
+      "stub_va": "0x0034A120",
+      "name": "SetSFXVolume"
+    },
+    {
+      "stub_va": "0x0034A180",
+      "name": "SetSniperAttackFlag"
+    },
+    {
+      "stub_va": "0x0034A1E0",
+      "name": "SetSplineSpeed"
+    },
+    {
+      "stub_va": "0x0034A240",
+      "name": "SetStartPosition"
+    },
+    {
+      "stub_va": "0x0034A2A0",
+      "name": "SetTeam"
+    },
+    {
+      "stub_va": "0x0034A300",
+      "name": "SetTextureState"
+    },
+    {
+      "stub_va": "0x0034A360",
+      "name": "SetTimeToBeat"
+    },
+    {
+      "stub_va": "0x0034A3C0",
+      "name": "SetVampireMode"
+    },
+    {
+      "stub_va": "0x0034A420",
+      "name": "SetVampireRegion"
+    },
+    {
+      "stub_va": "0x0034A480",
+      "name": "SetVoiceMinimumDistance"
+    },
+    {
+      "stub_va": "0x0034A4E0",
+      "name": "SetVolume"
+    },
+    {
+      "stub_va": "0x0034A540",
+      "name": "SetWalkForwardSpeed"
+    },
+    {
+      "stub_va": "0x0034A5A0",
+      "name": "Show"
+    },
+    {
+      "stub_va": "0x0034A600",
+      "name": "ShowObiSaber"
+    },
+    {
+      "stub_va": "0x0034A660",
+      "name": "SkyDomeOff"
+    },
+    {
+      "stub_va": "0x0034A6C0",
+      "name": "SkyDomeOn"
+    },
+    {
+      "stub_va": "0x0034A720",
+      "name": "Sleep"
+    },
+    {
+      "stub_va": "0x0034A780",
+      "name": "SleepAllow"
+    },
+    {
+      "stub_va": "0x0034A7E0",
+      "name": "SleepDisallow"
+    },
+    {
+      "stub_va": "0x0034A840",
+      "name": "SnapToFrame"
+    },
+    {
+      "stub_va": "0x0034A8A0",
+      "name": "Stand"
+    },
+    {
+      "stub_va": "0x0034A900",
+      "name": "StartGalaxy"
+    },
+    {
+      "stub_va": "0x0034A960",
+      "name": "StartLogo"
+    },
+    {
+      "stub_va": "0x0034A9C0",
+      "name": "StartMusicManager"
+    },
+    {
+      "stub_va": "0x0034AA20",
+      "name": "StartOpeningText"
+    },
+    {
+      "stub_va": "0x0034AA80",
+      "name": "StartOpeningTextAndWait"
+    },
+    {
+      "stub_va": "0x0034AAE0",
+      "name": "StopAction"
+    },
+    {
+      "stub_va": "0x0034AB40",
+      "name": "StopActions"
+    },
+    {
+      "stub_va": "0x0034ABA0",
+      "name": "StopAnimation"
+    },
+    {
+      "stub_va": "0x0034AC00",
+      "name": "StopAudioCue"
+    },
+    {
+      "stub_va": "0x0034AC60",
+      "name": "StopFiringAt"
+    },
+    {
+      "stub_va": "0x0034ACC0",
+      "name": "StopMusic"
+    },
+    {
+      "stub_va": "0x0034AD20",
+      "name": "StopMusicManager"
+    },
+    {
+      "stub_va": "0x0034AD80",
+      "name": "StopPlayback"
+    },
+    {
+      "stub_va": "0x0034ADE0",
+      "name": "StopPushing"
+    },
+    {
+      "stub_va": "0x0034AE40",
+      "name": "StopRecording"
+    },
+    {
+      "stub_va": "0x0034AEA0",
+      "name": "StopTalking"
+    },
+    {
+      "stub_va": "0x0034AF00",
+      "name": "StoreScript"
+    },
+    {
+      "stub_va": "0x0034AF60",
+      "name": null
+    },
+    {
+      "stub_va": "0x0034AFC0",
+      "name": "Subtract"
+    },
+    {
+      "stub_va": "0x0034B020",
+      "name": "SubtractHitPoints"
+    },
+    {
+      "stub_va": "0x0034B080",
+      "name": "SwapAI"
+    },
+    {
+      "stub_va": "0x0034B0E0",
+      "name": "SwingDisable"
+    },
+    {
+      "stub_va": "0x0034B140",
+      "name": "SwingEnable"
+    },
+    {
+      "stub_va": "0x0034B1A0",
+      "name": "TakeControlOf"
+    },
+    {
+      "stub_va": "0x0034B200",
+      "name": "TakePartialControlOf"
+    },
+    {
+      "stub_va": "0x0034B260",
+      "name": "Teleport"
+    },
+    {
+      "stub_va": "0x0034B2C0",
+      "name": "TextCapitals"
+    },
+    {
+      "stub_va": "0x0034B320",
+      "name": "TextCenter"
+    },
+    {
+      "stub_va": "0x0034B380",
+      "name": "TextColor"
+    },
+    {
+      "stub_va": "0x0034B3E0",
+      "name": "TextColorRGB"
+    },
+    {
+      "stub_va": "0x0034B440",
+      "name": "TextCoordinates"
+    },
+    {
+      "stub_va": "0x0034B4A0",
+      "name": "TextKerning"
+    },
+    {
+      "stub_va": "0x0034B500",
+      "name": "TextLeading"
+    },
+    {
+      "stub_va": "0x0034B560",
+      "name": "TextMaxWidth"
+    },
+    {
+      "stub_va": "0x0034B5C0",
+      "name": "TextOn"
+    },
+    {
+      "stub_va": "0x0034B620",
+      "name": "TextOff"
+    },
+    {
+      "stub_va": "0x0034B680",
+      "name": "TextRightJustify"
+    },
+    {
+      "stub_va": "0x0034B6E0",
+      "name": null
+    },
+    {
+      "stub_va": "0x0034B740",
+      "name": "TriggerUberGen"
+    },
+    {
+      "stub_va": "0x0034B7A0",
+      "name": "TriggerUberGenAndWait"
+    },
+    {
+      "stub_va": "0x0034B800",
+      "name": "TurnToNodeOrientation"
+    },
+    {
+      "stub_va": "0x0034B860",
+      "name": "TurnToNodeOrientationAndWait"
+    },
+    {
+      "stub_va": "0x0034B8C0",
+      "name": "UnequipWeapon"
+    },
+    {
+      "stub_va": "0x0034B920",
+      "name": "UnlimitedRespawn"
+    },
+    {
+      "stub_va": "0x0034B980",
+      "name": "UnloadWorld"
+    },
+    {
+      "stub_va": "0x0034B9E0",
+      "name": "UnlockDoor"
+    },
+    {
+      "stub_va": "0x0034BA40",
+      "name": "UnlockedScreenOn"
+    },
+    {
+      "stub_va": "0x0034BAA0",
+      "name": "UnlockedScreenOff"
+    },
+    {
+      "stub_va": "0x0034BB00",
+      "name": "UpdatePlayers"
+    },
+    {
+      "stub_va": "0x0034BB60",
+      "name": "ValidateName"
+    },
+    {
+      "stub_va": "0x0034BBC0",
+      "name": "VersusBattle"
+    },
+    {
+      "stub_va": "0x0034BC20",
+      "name": null
+    },
+    {
+      "stub_va": "0x0034BC80",
+      "name": null
+    },
+    {
+      "stub_va": "0x0034BCE0",
+      "name": "WaitForAbsolutelyAll"
+    },
+    {
+      "stub_va": "0x0034BD40",
+      "name": "WaitForAll"
+    },
+    {
+      "stub_va": "0x0034BDA0",
+      "name": "WaitForAny"
+    },
+    {
+      "stub_va": "0x0034BE00",
+      "name": "WaitForScriptToEnd"
+    },
+    {
+      "stub_va": "0x0034BE60",
+      "name": "WaitUntilActiveAttackBlocked"
+    },
+    {
+      "stub_va": "0x0034BEC0",
+      "name": "WaitUntilActivatedForcePower"
+    },
+    {
+      "stub_va": "0x0034BF20",
+      "name": "WaitUntilAllCharactersExitedRegion"
+    },
+    {
+      "stub_va": "0x0034BF80",
+      "name": "WaitUntilAllEnemiesExitedRegion"
+    },
+    {
+      "stub_va": "0x0034BFE0",
+      "name": "WaitUntilArrived"
+    },
+    {
+      "stub_va": "0x0034C040",
+      "name": "WaitUntilArrivedAtKeyFrame"
+    },
+    {
+      "stub_va": "0x0034C0A0",
+      "name": "WaitUntilArrivedAtSpecificKeyFrame"
+    },
+    {
+      "stub_va": "0x0034C100",
+      "name": "WaitUntilBoltHitSomethingInRegion"
+    },
+    {
+      "stub_va": "0x0034C160",
+      "name": "WaitUntilCreatedDamageReplacement"
+    },
+    {
+      "stub_va": "0x0034C1C0",
+      "name": "WaitUntilDamaged"
+    },
+    {
+      "stub_va": "0x0034C220",
+      "name": "WaitUntilDamagedBy"
+    },
+    {
+      "stub_va": "0x0034C280",
+      "name": "WaitUntilDidAcrobatics"
+    },
+    {
+      "stub_va": "0x0034C2E0",
+      "name": "WaitUntilDisplayFinished"
+    },
+    {
+      "stub_va": "0x0034C340",
+      "name": "WaitUntilDoorClosed"
+    },
+    {
+      "stub_va": "0x0034C3A0",
+      "name": "WaitUntilDoorOpen"
+    },
+    {
+      "stub_va": "0x0034C400",
+      "name": "WaitUntilEnteredRegion"
+    },
+    {
+      "stub_va": "0x0034C460",
+      "name": "WaitUntilEqual"
+    },
+    {
+      "stub_va": "0x0034C4C0",
+      "name": "WaitUntilEquippedItem"
+    },
+    {
+      "stub_va": "0x0034C520",
+      "name": "WaitUntilExitedRegion"
+    },
+    {
+      "stub_va": "0x0034C580",
+      "name": "WaitUntilFar"
+    },
+    {
+      "stub_va": "0x0034C5E0",
+      "name": "WaitUntilFarFromNode"
+    },
+    {
+      "stub_va": "0x0034C640",
+      "name": "WaitUntilFarFromRefPos"
+    },
+    {
+      "stub_va": "0x0034C6A0",
+      "name": "WaitUntilFinishedAnimationGoal"
+    },
+    {
+      "stub_va": "0x0034C700",
+      "name": "WaitUntilFinishedGesture"
+    },
+    {
+      "stub_va": "0x0034C760",
+      "name": "WaitUntilFinishedLooking"
+    },
+    {
+      "stub_va": "0x0034C7C0",
+      "name": "WaitUntilFinishedTurning"
+    },
+    {
+      "stub_va": "0x0034C820",
+      "name": "WaitUntilFiredShot"
+    },
+    {
+      "stub_va": "0x0034C880",
+      "name": "WaitUntilForcePulled"
+    },
+    {
+      "stub_va": "0x0034C8E0",
+      "name": "WaitUntilForcePushedCharacter"
+    },
+    {
+      "stub_va": "0x0034C940",
+      "name": "WaitUntilForcePushedObject"
+    },
+    {
+      "stub_va": "0x0034C9A0",
+      "name": "WaitUntilGenerated"
+    },
+    {
+      "stub_va": "0x0034CA00",
+      "name": "WaitUntilGreaterThan"
+    },
+    {
+      "stub_va": "0x0034CA60",
+      "name": "WaitUntilHitByForceThrow"
+    },
+    {
+      "stub_va": "0x0034CAC0",
+      "name": "WaitUntilKilled"
+    },
+    {
+      "stub_va": "0x0034CB20",
+      "name": "WaitUntilLessThan"
+    },
+    {
+      "stub_va": "0x0034CB80",
+      "name": "WaitUntilLockedOnTo"
+    },
+    {
+      "stub_va": "0x0034CBE0",
+      "name": "WaitUntilNear"
+    },
+    {
+      "stub_va": "0x0034CC40",
+      "name": "WaitUntilNearNode"
+    },
+    {
+      "stub_va": "0x0034CCA0",
+      "name": "WaitUntilNearRefPos"
+    },
+    {
+      "stub_va": "0x0034CD00",
+      "name": "WaitUntilNotBeingRendered"
+    },
+    {
+      "stub_va": "0x0034CD60",
+      "name": "WaitUntilNudged"
+    },
+    {
+      "stub_va": "0x0034CDC0",
+      "name": "WaitUntilNudgedBy"
+    },
+    {
+      "stub_va": "0x0034CE20",
+      "name": "WaitUntilPlayerRespawned"
+    },
+    {
+      "stub_va": "0x0034CE80",
+      "name": "WaitUntilRegainedControl"
+    },
+    {
+      "stub_va": "0x0034CEE0",
+      "name": "WaitUntilRemoved"
+    },
+    {
+      "stub_va": "0x0034CF40",
+      "name": "WaitUntilSaidLine"
+    },
+    {
+      "stub_va": "0x0034CFA0",
+      "name": "WaitUntilSees"
+    },
+    {
+      "stub_va": "0x0034D000",
+      "name": "WaitUntilSetOnFire"
+    },
+    {
+      "stub_va": "0x0034D060",
+      "name": "WaitUntilStateActivated"
+    },
+    {
+      "stub_va": "0x0034D0C0",
+      "name": "WaitUntilStateShutdown"
+    },
+    {
+      "stub_va": "0x0034D120",
+      "name": "WaitUntilUsedCannon"
+    },
+    {
+      "stub_va": "0x0034D180",
+      "name": "WakeUp"
+    },
+    {
+      "stub_va": "0x0034D1E0",
+      "name": "Walk"
+    },
+    {
+      "stub_va": "0x0034D240",
+      "name": "WalkToNode"
+    },
+    {
+      "stub_va": "0x0034D2A0",
+      "name": "WalkToNodeAndWait"
+    },
+    {
+      "stub_va": "0x0034D300",
+      "name": "Zoom"
+    },
+    {
+      "stub_va": "0x0034D360",
+      "name": "ZoomAndWait"
+    },
+    {
+      "stub_va": "0x0034D3C0",
+      "name": null
+    },
+    {
+      "stub_va": "0x0034D420",
+      "name": "<>"
+    },
+    {
+      "stub_va": "0x0034D480",
+      "name": ">"
+    },
+    {
+      "stub_va": "0x0034D4E0",
+      "name": ">="
+    },
+    {
+      "stub_va": "0x0034D540",
+      "name": "<"
+    },
+    {
+      "stub_va": "0x0034D5A0",
+      "name": "<="
+    }
+  ]
+}
