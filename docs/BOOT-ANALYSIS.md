@@ -89,6 +89,13 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   resolved object's callback. This identifies the generic execution path from
   the Flash `GetURL2` bridge to command lookup, but not the `NextLevel`
   callback or its level-loading behavior.
+- Cross-checking the plaintext game scripts shows `NextLevel` used to move
+  between named mission/cutscene resources, while `NextPart` links lettered
+  parts within a mission sequence. `cut_jc4.script` explicitly notes that
+  `NextLevel` deletes the current script and performs cleanup before calling
+  it. The observed transition sites are listed in
+  [`MISSION-FLOW.md`](MISSION-FLOW.md); they are asset-level evidence, not
+  proof that the runtime currently loads those resources successfully.
 - The native registration arrays contain many additional command names.
   Their observed families include camera and object movement, animation,
   sound/music playback, waits, player/profile UI, mission transitions, and
