@@ -6,6 +6,25 @@ from the user's Ghidra project, `XBE_OBIWAN`.
 
 ## Verified path
 
+- `RunTitleMainLoop` at `0x00025730` is the title's main dispatcher. It
+  initializes XAPI gamepad devices, configures the file-system cache, obtains
+  launch information, initializes three core subsystems (`0x00210BE0`,
+  `0x00228C70`, and `0x00206850`), then chooses a launch path. The launch-info
+  branch can set demo/multiplayer state and run a demo without entering the
+  ordinary front end. The normal path calls `LoadOptionalStartupBundle` and
+  `0x0002AEFC` when the startup flag is set, then invokes `StartFrontEnd`.
+  After the selected path, it stays in the title loop while the title-active
+  predicate remains true, pumping the title scheduler and servicing a pending
+  device action. When the loop ends, the startup thread's caller falls back to
+  the dashboard.
+- `LoadOptionalStartupBundle` at `0x0020BB80` returns immediately when global
+  `0x004F1C00` is zero. Otherwise it passes `d:\startup.bndl` to the bundle
+  loader at `0x002C3E50` and returns that loader's result. The bundle is
+  conditional title data, not the XBE's executable image.
+- `StartFrontEnd` at `0x000A32E0` conditionally calls `0x0009E3C0(1, arg)`
+  when global `0x004F150C` is zero, always calls `0x000A0A20(0xB)`, and then
+  enters `RunFrontEndFlow` (`0x000B7830`). The helper names remain unresolved;
+  the call order and condition are directly visible in Ghidra.
 - The XBE entry at `0x0002B180` initializes the TLS index and starts the game
   thread with routine `0x0002B111`. If thread creation fails, it calls
   `XapiBootToDash`; otherwise startup continues in the game thread.
@@ -29,6 +48,14 @@ from the user's Ghidra project, `XBE_OBIWAN`.
   `JEDI <number>` names against existing profiles and publishes the chosen
   name. Otherwise, it opens `selectPlayer.swf`; a successful selection then
   advances to `selectMission.swf`.
+- The mission-unlock portion of `RunFrontEndFlow` constructs keys including
+  `SA_01`, `SA_02`, `SA_03`, and `L05_7`, then asks `0x0009C080` for an index
+  before publishing unlock flags to Flash. `0x0009C080` scans indices 0 through
+  26 and returns the first index for which `0x0009BF30` reports a match, or
+  `-1` if none match. `0x0009BF30` initializes two string-like objects and
+  compares their backing data through `0x00012030`. This establishes a
+  bounded string-match lookup, but the underlying record table and the exact
+  meaning of its 27 slots are not yet identified.
 - After `newPlayer.swf` returns success, the game checks up to seven generated
   `JEDI <number>` names against existing profiles and calls
   `PublishPlayerNameToFlash` (`0x000B70A0`) to set `playerName` and
@@ -68,10 +95,12 @@ diagnostics directory, so its cause is still unknown.
 
 ## Next reverse-engineering target
 
-The next Ghidra target is the Flash callback that supplies `playerName` to
-`CommitActivePlayerProfile`. Direct xrefs show the commit routine is reached
-from profile management and game-flow dispatch, but the exact callback that
-consumes the Flash property is still unresolved. The structure and encoding of
-the variable profile fields also need to be documented before attempting to
-seed save data. The reported later crash still has no accompanying bundle or
-crash log, so its cause remains unknown.
+The remaining front-end target is the Flash callback that supplies
+`playerName` to `CommitActivePlayerProfile`. Direct xrefs show the commit
+routine is reached from profile management and game-flow dispatch, but the
+exact callback that consumes the Flash property is still unresolved. The
+structure and encoding of the variable profile fields also need to be
+documented before attempting to seed save data. The next title-flow pass should
+identify the 27-entry mission lookup table and trace the successful
+`selectMission.swf` result into the level loader. The reported later crash still
+has no accompanying bundle or crash log, so its cause remains unknown.
