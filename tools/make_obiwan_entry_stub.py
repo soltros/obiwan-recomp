@@ -12,6 +12,10 @@ OUTPUT_E = ROOT / "src/recomp/gen/recomp_entry_0016b0f3.c"
 OUTPUT_F = ROOT / "src/recomp/gen/recomp_entry_0016bdb3.c"
 OUTPUT_G = ROOT / "src/recomp/gen/recomp_entry_0016a393.c"
 OUTPUT_H = ROOT / "src/recomp/gen/recomp_entry_0016a59f.c"
+OUTPUT_I = ROOT / "src/recomp/gen/recomp_entry_0016a321.c"
+OUTPUT_J = ROOT / "src/recomp/gen/recomp_entry_0016a01f.c"
+OUTPUT_K = ROOT / "src/recomp/gen/recomp_entry_0016e96c.c"
+OUTPUT_L = ROOT / "src/recomp/gen/recomp_entry_0016f71f.c"
 
 
 def function_body(source: str, signature: str) -> str:
@@ -323,6 +327,146 @@ def main() -> None:
 """ + source_h + "\n"
     OUTPUT_H.write_text(output_h)
     print(f"Wrote {OUTPUT_H} ({len(output_h)} bytes)")
+
+    # Pressing A on a newPlayer keyboard letter reaches the interior block
+    # at 0x16A321 (fallthrough after the jmp at 0x16A31C). Restore the
+    # cmp [esp+0x33c4],1 / jl 0x1754b1 block before its join at 0x16A32F.
+    source_i = function_body(source, "void sub_0015E940(void)")
+    source_i = source_i.replace("void sub_0015E940(void)",
+                                "void obiwan_entry_0016A321(void)", 1)
+    if source_i.count(inherited) != 1:
+        raise ValueError("unexpected generated parent prologue for 0x16A321")
+    source_i = source_i.replace(inherited,
+                                inherited + "\n    goto loc_0016A321;", 1)
+    marker_i = "loc_0016A32F: ;"
+    entry_i = """loc_0016A321: ;
+    _fa = (uint32_t)(MEM32(esp + 0x33C4)) & 0xFFFFFFFFu;
+    _fb = 1u;
+    _fas = (int32_t)_fa;
+    _fbs = (int32_t)_fb;
+    _cf = (int)(_fa < _fb);
+    if (CMP_L(_fas, _fbs)) goto loc_001754B1;
+
+"""
+    if source_i.count(marker_i) != 1:
+        raise ValueError("expected 0x16A32F continuation is missing or ambiguous")
+    source_i = source_i.replace(marker_i, entry_i + marker_i, 1)
+    output_i = """/*
+ * Obi-Wan interior entry adapter for 0x0016A321.
+ * Restores the omitted cmp/jl block from guest instruction bytes.
+ * Regenerate with tools/make_obiwan_entry_stub.py after recompilation.
+ */
+#define RECOMP_GENERATED_CODE
+#include "recomp_funcs.h"
+
+""" + source_i + "\n"
+    OUTPUT_I.write_text(output_i)
+    print(f"Wrote {OUTPUT_I} ({len(output_i)} bytes)")
+
+    # The same FINISHED dispatch next reaches 0x16A01F (fallthrough after
+    # the jmp at 0x16A01A). Restore the mov/cmp/jne block before 0x16A02D.
+    source_j = function_body(source, "void sub_0015E940(void)")
+    source_j = source_j.replace("void sub_0015E940(void)",
+                                "void obiwan_entry_0016A01F(void)", 1)
+    if source_j.count(inherited) != 1:
+        raise ValueError("unexpected generated parent prologue for 0x16A01F")
+    source_j = source_j.replace(inherited,
+                                inherited + "\n    goto loc_0016A01F;", 1)
+    marker_j = "loc_0016A02D: ;"
+    entry_j = """loc_0016A01F: ;
+    SET_LO8(eax, MEM8(esi + 0x490));
+    _fa = (uint32_t)(LO8(eax)) & 0xFFu;
+    _fb = 0u;
+    _fas = (int32_t)(int8_t)_fa;
+    _fbs = 0;
+    if (CMP_NE(_fa, _fb)) goto loc_0015E9E4;
+
+"""
+    if source_j.count(marker_j) != 1:
+        raise ValueError("expected 0x16A02D continuation is missing or ambiguous")
+    source_j = source_j.replace(marker_j, entry_j + marker_j, 1)
+    output_j = """/*
+ * Obi-Wan interior entry adapter for 0x0016A01F.
+ * Restores the omitted mov/cmp/jne block from guest instruction bytes.
+ * Regenerate with tools/make_obiwan_entry_stub.py after recompilation.
+ */
+#define RECOMP_GENERATED_CODE
+#include "recomp_funcs.h"
+
+""" + source_j + "\n"
+    OUTPUT_J.write_text(output_j)
+    print(f"Wrote {OUTPUT_J} ({len(output_j)} bytes)")
+
+    # Loading level L01_1 reaches another interior dispatch block:
+    # fallthrough after the jmp at 0x16E967. Restore cmp [esp+0x33c4],1 /
+    # jl 0x1754b1 before its generated join at 0x16E97A.
+    source_k = function_body(source, "void sub_0015E940(void)")
+    source_k = source_k.replace("void sub_0015E940(void)",
+                                "void obiwan_entry_0016E96C(void)", 1)
+    if source_k.count(inherited) != 1:
+        raise ValueError("unexpected generated parent prologue for 0x16E96C")
+    source_k = source_k.replace(inherited,
+                                inherited + "\n    goto loc_0016E96C;", 1)
+    marker_k = "loc_0016E97A: ;"
+    entry_k = """loc_0016E96C: ;
+    _fa = (uint32_t)(MEM32(esp + 0x33C4)) & 0xFFFFFFFFu;
+    _fb = 1u;
+    _fas = (int32_t)_fa;
+    _fbs = (int32_t)_fb;
+    _cf = (int)(_fa < _fb);
+    if (CMP_L(_fas, _fbs)) goto loc_001754B1;
+
+"""
+    if source_k.count(marker_k) != 1:
+        raise ValueError("expected 0x16E97A continuation is missing or ambiguous")
+    source_k = source_k.replace(marker_k, entry_k + marker_k, 1)
+    output_k = """/*
+ * Obi-Wan interior entry adapter for 0x0016E96C.
+ * Restores the omitted cmp/jl block from guest instruction bytes.
+ * Regenerate with tools/make_obiwan_entry_stub.py after recompilation.
+ */
+#define RECOMP_GENERATED_CODE
+#include "recomp_funcs.h"
+
+""" + source_k + "\n"
+    OUTPUT_K.write_text(output_k)
+    print(f"Wrote {OUTPUT_K} ({len(output_k)} bytes)")
+
+    # L01_1 script load reaches the interior block at 0x16F71F
+    # (fallthrough after the jmp at 0x16F71A). Restore mov ebp,[esp+0x33c4]
+    # / cmp ebp,2 / jl 0x1754b1 before its generated join at 0x16F72F.
+    source_l = function_body(source, "void sub_0015E940(void)")
+    source_l = source_l.replace("void sub_0015E940(void)",
+                                "void obiwan_entry_0016F71F(void)", 1)
+    if source_l.count(inherited) != 1:
+        raise ValueError("unexpected generated parent prologue for 0x16F71F")
+    source_l = source_l.replace(inherited,
+                                inherited + "\n    goto loc_0016F71F;", 1)
+    marker_l = "loc_0016F72F: ;"
+    entry_l = """loc_0016F71F: ;
+    ebp = MEM32(esp + 0x33C4);
+    _fa = (uint32_t)(ebp) & 0xFFFFFFFFu;
+    _fb = 2u;
+    _fas = (int32_t)_fa;
+    _fbs = (int32_t)_fb;
+    _cf = (int)(_fa < _fb);
+    if (CMP_L(_fas, _fbs)) goto loc_001754B1;
+
+"""
+    if source_l.count(marker_l) != 1:
+        raise ValueError("expected 0x16F72F continuation is missing or ambiguous")
+    source_l = source_l.replace(marker_l, entry_l + marker_l, 1)
+    output_l = """/*
+ * Obi-Wan interior entry adapter for 0x0016F71F.
+ * Restores the omitted mov/cmp/jl block from guest instruction bytes.
+ * Regenerate with tools/make_obiwan_entry_stub.py after recompilation.
+ */
+#define RECOMP_GENERATED_CODE
+#include "recomp_funcs.h"
+
+""" + source_l + "\n"
+    OUTPUT_L.write_text(output_l)
+    print(f"Wrote {OUTPUT_L} ({len(output_l)} bytes)")
 
 
 if __name__ == "__main__":

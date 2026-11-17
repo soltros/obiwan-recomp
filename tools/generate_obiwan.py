@@ -23,7 +23,7 @@ def main():
     xbe=WORK/'default.xbe';shutil.copyfile(source,xbe)
     dis=WORK/'disasm';ids=WORK/'func-id';abi=WORK/'abi'
     jobs=[('parse',['tools.xbe_parser',str(xbe),'--quiet','--json',str(WORK/'default_analysis.json')]),
-          ('disasm',['tools.disasm',str(xbe),'--text-only','--extra-sections','D3D,D3DX,XGRPH,DSOUND,XPP','-o',str(dis)]),
+          ('disasm',['tools.disasm',str(xbe),'--text-only','--extra-sections','D3D,D3DX,XGRPH,DSOUND,XPP','--seed-functions',str(ROOT/'tools/seed_functions.json'),'-o',str(dis)]),
           ('identify',['tools.func_id',str(xbe),'--functions',str(dis/'functions.json'),'--strings',str(dis/'strings.json'),'--xrefs',str(dis/'xrefs.json'),'--output',str(ids)]),
           ('abi',['tools.abi_analysis',str(xbe),'--disasm-dir',str(dis),'--func-id-dir',str(ids),'--output-dir',str(abi)]),
           ('generate',['tools.recomp',str(xbe),'--all','--split','100','--disasm-dir',str(dis),'--func-id-dir',str(ids),'--abi-dir',str(abi),'--gen-dir',str(GEN)])]
@@ -70,5 +70,6 @@ def main():
             (WORK/'pipeline.json').write_text(json.dumps(report,indent=2)+'\n')
             print(f'applied {len(annotations)} confirmed function names, including {registration_count} named script registration stubs',flush=True)
     subprocess.run([sys.executable, str(ROOT/'tools/make_obiwan_entry_stub.py')], check=True)
+    subprocess.run([sys.executable, str(ROOT/'tools/make_obiwan_seed_stubs.py')], check=True)
     return 0
 if __name__=='__main__':sys.exit(main())

@@ -41,4 +41,6 @@ Generation writes game-specific C files under ignored `src/recomp/gen/`; do not 
 
 ## Status
 
-The title reaches its menu flow and renders the Obi-Wan logo and menu frame. Menu text and some content are still incorrect; gameplay and complete graphics/input behavior are not verified. See [SPRINT-01](docs/SPRINT-01.md) for current evidence and next steps.
+The title now runs from the menus into verified gameplay. Scripted diagnostic runs cover the SELECT screen, the name-entry keyboard, profile commit (which writes the save), the title's quick-reboot relaunch, and third-person play in the first Coruscant level with HUD and pause menu. That path needs the companion runtime patch in xbox-linux (`patches/xboxrecomp-obiwan-input-launch.patch`: OHCI DMA address resolution and `RECOMP_LAUNCH_FILE` launch-page handoff), applied automatically by its toolchain.
+
+Menu/briefing/crawl text still renders incorrectly. The defect is correlated, not fixed: UI draws arrive at roughly Flash-twip scale (~20x) against the 640x480 clip while 3D rendering is coherent, and 184 distinct NV097 methods remain unhandled. Performance is the software rasterizer's (roughly 1-3.5 fps at this stage), and play past the opening of L01_1, audio correctness, and mission completion are unverified. See [SPRINT-02](docs/SPRINT-02.md) for the current evidence and next steps, and [SPRINT-01](docs/SPRINT-01.md) for the static baseline it builds on.
